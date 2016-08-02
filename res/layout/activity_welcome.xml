@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_world" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dip"
+            android:gravity="center" >
+
+            <View
+                android:id="@+id/iv1"
+                style="@style/dot_style"
+                android:background="@drawable/dot_focused" />
+
+            <View
+                android:id="@+id/iv2"
+                style="@style/dot_style" />
+
+            <View
+                android:id="@+id/iv3"
+                style="@style/dot_style"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:Android="http://schemas.android.com/apk/res/android">
+
+    <item Android:drawable="@drawable/_bg_radio_tab_checked" Android:state_checked="true"/>
+    <item Android:drawable="@drawable/_bg_radio_tab_normal" Android:state_checked="false"/>
+
+</selector>

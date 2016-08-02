@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Medical</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="s_name">陕西欣欣家政服务有限公司</string>
+    <string name="title_activity_homepage_fragment">HomepageFragment</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_pwd_login">PwdLoginActivity</string>
+    <string name="title_activity_forget_pwd">ForgetPwdActivity</string>
+    <string name="zero">0</string>
+    <string name="double_zero">0.0</string>
+    <string name="title_activity_step_detail">StepDetailActivity</string>
+
+</resources>
