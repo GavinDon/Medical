@@ -96,7 +96,6 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 	private OnrefreshFlag freshFlag; // 是下拉默认为true;
 
 	private HealthHotAdapter mAdapter;
-	private String szTime;
 	// 返回参数排序
 	Comparator<Long> reverseOrder = Collections.<Long> reverseOrder();
 	List<Long> timeList = new ArrayList<Long>();// 资讯创建时间列表
@@ -450,7 +449,6 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 
 		NewsResp resp = (NewsResp) HandleMsgDistribute.getInstance().queryCompleteMsg(recvTime);
 		List<Net_NewsInfo_PRO> info = resp.info;
-		szTime = resp.szTime;
 
 		if (!info.isEmpty()) {
 			for (int i = 0; i < info.size(); i++) {

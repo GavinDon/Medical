@@ -12,5 +12,9 @@
     <string name="zero">0</string>
     <string name="double_zero">0.0</string>
     <string name="title_activity_step_detail">StepDetailActivity</string>
+    <string name="title_activity_recod">RecodActivity</string>
+    <string name="title_activity_record_detail">RecordDetailActivity</string>
+    <string name="title_activity_treat_record">TreatRecordActivity</string>
+    <string name="title_activity_treat_detail">TreatDetailActivity</string>
 
 </resources>

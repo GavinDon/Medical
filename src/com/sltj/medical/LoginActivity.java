@@ -213,7 +213,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 		} else {
 			String result = MTools.judgeNetResult_Auth(authLoginResp.eResult);
-			ToastUtils.show(this,String.valueOf( eOPERRESULT_PRO.E_OPER_AUTHFAILER_PRO), 0);
+			ToastUtils.show(this, String.valueOf(eOPERRESULT_PRO.E_OPER_AUTHFAILER_PRO), 0);
 			LogUtils.i("登录失败" + result);
 		}
 	}
@@ -222,9 +222,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_login:
-			// if (strCode == etCode.getText().toString().trim()) {
-			loginProBuffer(etCode.getText().toString().trim());
-			// }
+			if (etCode.getText().toString().trim().equals(strCode)) {
+				loginProBuffer(etCode.getText().toString().trim());
+			}else{
+				ToastUtils.show(this, "验证码错误", 0);
+			}
 
 			break;
 		case R.id.tv_login_pwd:
@@ -232,7 +234,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.send_code:
-			loadVerifaction();
+			strPhone = etPhone.getText().toString().trim();
+			if (TextUtils.isEmpty(strPhone)) {
+				ToastUtils.show(this, "请输入正确的手机号", 0);
+				return;
+			}
+			if (strPhone.length() < 11) {
+				ToastUtils.show(this, "请输入正确的手机号", 0);
+			} else {
+				timeButton.setMobile(strPhone);
+				// 获取验证码
+				timeButton.settextAfter("秒后重新获取").setTextBefore("获取验证码").setLenght(60 * 1000);
+				loadVerifaction();
+			}
 
 			break;
 
@@ -244,24 +258,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	 * 获取到服务器返回的验证码然后通过平台给手机发送验证码
 	 */
 	private void sendPlatCode(final String code) {
-		strPhone = etPhone.getText().toString().trim();
-		if (TextUtils.isEmpty(strPhone)) {
-			ToastUtils.show(this, "请输入正确的手机号", 0);
-			return;
-		}
-		timeButton.setMobile(strPhone);
-		if (strPhone.length() < 11) {
-			ToastUtils.show(this, "请输入正确的手机号", 0);
-		} else {
-			// 获取验证码
-			timeButton.settextAfter("秒后重新获取").setTextBefore("获取验证码").setLenght(60 * 1000);
-			new Thread(new Runnable() {
-				public void run() {
-					// 网络操作开启线程
-					RegistAccoutUtil.sendSMS(strPhone, code);
-				}
-			}).start();
-		}
+
+		new Thread(new Runnable() {
+			public void run() {
+				// 网络操作开启线程
+				RegistAccoutUtil.sendSMS(strPhone, code);
+			}
+		}).start();
+
 	}
 
 	/**

@@ -2,10 +2,13 @@ package com.sltj.medical.publicMsg;
 
 import java.util.List;
 
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eOPERRESULT_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_NewsInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_ServerInfo_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Tijian_RecoderInfo_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Zhiliao_RecoderInfo_PRO;
 
 public class MsgReceiveDef {
 
@@ -89,6 +92,41 @@ public class MsgReceiveDef {
 	public static class ReadNewsResp {
 		public eOPERRESULT_PRO eResult;// 操作结果
 		public int newsId;// 资讯信息
+	}
+
+	/**
+	 * 获取体检记录响应消息
+	 */
+	public static class PhysicalResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public ePAGE_TYPE_PRO ePageType;// 获取时间点前的还是后的资讯
+		public String szTime;// 获取这个时间之后的资讯
+		public List<Net_Tijian_RecoderInfo_PRO> info;
+	}
+	/**
+	 * 获取治疗响应消息
+	 */
+	public static class TreatResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public ePAGE_TYPE_PRO ePageType;// 获取时间点前的还是后的资讯
+		public String szTime;// 获取这个时间之后的资讯
+		public List<Net_Zhiliao_RecoderInfo_PRO> info;
+	}
+	/**
+	 * 获取体检记录详情响应消息
+	 */
+	public static class PhysicalDetailResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public Net_Tijian_RecoderInfo_PRO info;
+		public String Szurl;
+	}
+	/**
+	 * 获取治疗详情响应消息
+	 */
+	public static class TreatDetailResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public Net_Zhiliao_RecoderInfo_PRO info;
+		public String szContent; 
 	}
 
 	// ============================通知类消息================================

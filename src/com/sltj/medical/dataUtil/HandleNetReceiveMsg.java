@@ -8,7 +8,12 @@ import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_LoginResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetHomeNewsResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_InfoResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_RecordResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_InfoResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_ReadNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.NetConnectResp_PRO_MSG;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_CommonResp_PRO_MSG;
@@ -20,7 +25,11 @@ import com.sltj.medical.publicMsg.MsgReceiveDef.HomeNewsResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NetBestServerResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NetConnectResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NewsResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalDetailResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.ReadNewsResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.TreatDetailResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.TreatResp;
 import com.sltj.medical.publicMsg.NetHouseMsgType;
 
 /**
@@ -76,6 +85,18 @@ public class HandleNetReceiveMsg {
 			break;
 		case NetHouseMsgType.CMD_READ_NEWS_RESP:// 阅读资讯列表响应
 			obj = HandleReadNewsResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_PHYSICAL_RESP:// 体检记录响应
+			obj = HandlePhysicalResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_PHYSICALDETAIL_RESP:// 体检记录祥情响应
+			obj = HandlePhysicalDetailResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_TREAT_RESP:// 治疗记录响应
+			obj = HandleTreatResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_TREATDETAIL_RESP:// 治疗记录祥情
+			obj = HandleTreatDetailResp(proBufBody);
 			break;
 
 		default:
@@ -207,8 +228,8 @@ public class HandleNetReceiveMsg {
 			CmdMsgPro.CMD_GetNewsResp_PRO newsResp_PRO = CMD_GetNewsResp_PRO.parseFrom(proBufBody);
 			resp.info = newsResp_PRO.getInfoList();
 			resp.eResult = newsResp_PRO.getEResult();
-			resp.szTime=newsResp_PRO.getSzTime();
-			resp.ePageType=newsResp_PRO.getEPageType();
+			resp.szTime = newsResp_PRO.getSzTime();
+			resp.ePageType = newsResp_PRO.getEPageType();
 
 		} catch (InvalidProtocolBufferException e) {
 			e.printStackTrace();
@@ -230,6 +251,80 @@ public class HandleNetReceiveMsg {
 			e.printStackTrace();
 		}
 		return resp;
+	}
+
+	/*
+	 * 获取体检记录 响应
+	 */
+	private static PhysicalResp HandlePhysicalResp(byte[] proBufBody) {
+
+		MsgReceiveDef.PhysicalResp resp = new MsgReceiveDef.PhysicalResp();
+		try {
+			CmdMsgPro.CMD_Get_Tijian_RecordResp_PRO newsResp_PRO = CMD_Get_Tijian_RecordResp_PRO.parseFrom(proBufBody);
+			resp.info = newsResp_PRO.getInfoList();
+			resp.ePageType = newsResp_PRO.getEPageType();
+			resp.szTime = newsResp_PRO.getSzTime();
+			resp.eResult = newsResp_PRO.getEResult();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return resp;
+	}
+
+	/*
+	 * 获取治疗记录 响应
+	 */
+	private static TreatResp HandleTreatResp(byte[] proBufBody) {
+
+		TreatResp Localresp = new MsgReceiveDef.TreatResp();
+		try {
+			CmdMsgPro.CMD_Get_Zhiliao_RecordResp_PRO servResp = CMD_Get_Zhiliao_RecordResp_PRO.parseFrom(proBufBody);
+			Localresp.info = servResp.getInfoList();
+			Localresp.ePageType = servResp.getEPageType();
+			Localresp.szTime = servResp.getSzTime();
+			Localresp.eResult = servResp.getEResult();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 获取体检记录祥情 响应
+	 */
+	private static PhysicalDetailResp HandlePhysicalDetailResp(byte[] proBufBody) {
+
+		MsgReceiveDef.PhysicalDetailResp Localresp = new MsgReceiveDef.PhysicalDetailResp();
+		try {
+			CmdMsgPro.CMD_Get_Tijian_InfoResp_PRO servResp = CMD_Get_Tijian_InfoResp_PRO.parseFrom(proBufBody);
+			Localresp.info = servResp.getInfo();
+			Localresp.eResult = servResp.getEResult();
+			Localresp.Szurl = servResp.getSzURL();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 获取治疗记录祥情 响应
+	 */
+	private static TreatDetailResp HandleTreatDetailResp(byte[] proBufBody) {
+
+		MsgReceiveDef.TreatDetailResp Localresp = new MsgReceiveDef.TreatDetailResp();
+		try {
+			CmdMsgPro.CMD_Get_Zhiliao_InfoResp_PRO servResp = CMD_Get_Zhiliao_InfoResp_PRO.parseFrom(proBufBody);
+			Localresp.info = servResp.getInfo();
+			Localresp.eResult = servResp.getEResult();
+			Localresp.szContent = servResp.getSzContent();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
 	}
 
 	// ----------------------------以下为通用响应------------------------------------------//

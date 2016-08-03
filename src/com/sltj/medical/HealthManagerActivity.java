@@ -8,6 +8,7 @@ import java.util.Map;
 import com.sltj.medical.adapter.MineZoneAdapter;
 import com.sltj.medical.base.BaseActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,9 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * 健康管理页面
- *  Author linan 
- * Date：2016年8月2日 下午4:43:51
+ * 健康管理页面 Author linan Date：2016年8月2日 下午4:43:51
  */
 public class HealthManagerActivity extends BaseActivity implements OnItemClickListener {
 	private ListView mListView;
@@ -61,8 +60,33 @@ public class HealthManagerActivity extends BaseActivity implements OnItemClickLi
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Intent mIntent = new Intent();
+		switch (position) {
+		case 0:
+			mIntent.setClass(this, RecodActivity.class);
+			startActivity(mIntent);
+			break;
+		case 1:
+			mIntent.setClass(this, TreatRecordActivity.class);
+			startActivity(mIntent);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+
+			break;
+
+		}
 
 	}
+	
+	
+
+	// --
+	//
+	// --
 
 	/*
 	 * 初始化标题栏

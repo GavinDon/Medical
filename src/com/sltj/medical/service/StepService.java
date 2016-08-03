@@ -208,7 +208,7 @@ public class StepService extends Service implements SensorEventListener {
 		startForeground(0, notification);
 
 		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.notify(R.string.app_name, notification);
+//		nm.notify(R.string.app_name, notification);
 	}
 
 	@Override

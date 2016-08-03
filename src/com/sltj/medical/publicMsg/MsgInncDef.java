@@ -115,6 +115,33 @@ public final class MsgInncDef {
 
 	}
 
+	/**
+	 * 获取体检记录列表
+	 */
+	public static class IphsicalRecordReq {
+		public int iUserId; // 用户ID
+		public ePAGE_TYPE_PRO ePageType; // 获取时间点前的还是后
+		public String szBeforTime; // 这个时间点
+		public int iRecoderNum;// 一次获取多少条消息
+		public int iBeforRecoderid;// 这条记录之前的消息，每条消息发送成功会返还一个消息ID
+	}
+	/**
+	 * 获取体检记录详情
+	 *
+	 */
+	public static class IPhsicalRecordDetailReq{
+		public int IUserId;
+		public int iRecordIndex;
+	}
+	/**
+	 * 获取治疗记录详情
+	 *
+	 */
+	public static class ITreatRecordDetailReq{
+		public int IUserId;
+		public int iRecordIndex;
+	}
+
 	// -------------------------------------------------------------------------------------//
 	/*
 	 * 更新密码请求

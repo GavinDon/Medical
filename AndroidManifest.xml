@@ -147,6 +147,22 @@
             android:label="@string/title_activity_step_detail"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".RecodActivity"
+            android:label="@string/title_activity_recod" >
+        </activity>
+        <activity
+            android:name=".RecordDetailActivity"
+            android:label="@string/title_activity_record_detail" >
+        </activity>
+        <activity
+            android:name=".TreatRecordActivity"
+            android:label="@string/title_activity_treat_record" >
+        </activity>
+        <activity
+            android:name=".TreatDetailActivity"
+            android:label="@string/title_activity_treat_detail" >
+        </activity>
     </application>
 
 </manifest>
