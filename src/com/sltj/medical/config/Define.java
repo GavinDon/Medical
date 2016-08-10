@@ -13,6 +13,7 @@ public class Define {
 	/*
 	 * 图片路径
 	 */
+	public final static String newsUrl="http://218.30.21.157:8080/obel/newmanager.do?o=shownewscontent&id=";
    
 	
 	

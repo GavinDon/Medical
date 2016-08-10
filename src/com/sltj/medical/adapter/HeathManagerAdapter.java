@@ -16,10 +16,10 @@ import android.widget.TextView;
  * Author linan
  * Date：2016年8月2日 下午3:05:49
  */
-public class MineZoneAdapter extends MyBaseAdapter<Map<String, Object>> {
+public class HeathManagerAdapter extends MyBaseAdapter<Map<String, Object>> {
 	private Context mContext;
 
-	public MineZoneAdapter(Context context, List<Map<String, Object>> lst) {
+	public HeathManagerAdapter(Context context, List<Map<String, Object>> lst) {
 		super(context, lst);
 		this.mContext = context;
 	}
@@ -31,7 +31,7 @@ public class MineZoneAdapter extends MyBaseAdapter<Map<String, Object>> {
 
 	@Override
 	public View getLayout() {
-		return LayoutInflater.from(mContext).inflate(R.layout.adapter_mine_listview, null);
+		return LayoutInflater.from(mContext).inflate(R.layout.adapter_healthmanager_listview, null);
 	}
 
 	@Override

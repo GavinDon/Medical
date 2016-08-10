@@ -112,7 +112,7 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 				mPullListView.onRefreshComplete();
 				break;
 			case Config.LOAD_DATA_OVERTIME:
-//				mAdapter.notifyDataSetChanged();
+				// mAdapter.notifyDataSetChanged();
 				mPullListView.onRefreshComplete();
 				// ToastUtils.show(mContext, "请求失败",0);
 
@@ -382,7 +382,9 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Map<String, Object> map = (Map<String, Object>) parent.getAdapter().getItem(position);
-		ToastUtils.show(mContext, map.get("read") + "=", 0);
+		Intent mIntent = new Intent(this.getActivity(), NewsDetailActivity.class);
+		mIntent.putExtra("newsId", String.valueOf(map.get("newsId")));
+		startActivity(mIntent);
 	}
 
 	// --------------------------------数据请求分割线---------------------------------------//
@@ -406,6 +408,8 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 		if (freshFlag == OnrefreshFlag.REFRESH_DOWN) {
 			if (!timeList.isEmpty()) {
 				newsReq.szTime = MTools.getTimeYMDHMS(timeList.get(0));
+			} else {
+				newsReq.szTime = MTools.getCurrentDate("yyyy-MM-dd HH:mm:ss");
 			}
 			newsReq.ePageType = ePAGE_TYPE_PRO.EN_PAGE_NEW_PRO_VALUE;
 		} else if (freshFlag == OnrefreshFlag.REFRESH_PullUp) {
@@ -416,7 +420,7 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 			}
 			newsReq.ePageType = ePAGE_TYPE_PRO.EN_PAGE_OLD_PRO_VALUE;
 		}
-		
+
 		switch (type) {
 		case eNEWS_PRO.EN_NEWS_ACCURATE_PRO_VALUE:// 精准医疗
 			seqAccurate = MyApplication.SequenceNo++;
@@ -456,6 +460,8 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 				map.put("read", info.get(i).getIHaveReadNum());
 				map.put("collect", info.get(i).getICollectionNum());
 				map.put("title", info.get(i).getSzTitle());
+				map.put("newsId", info.get(i).getId());
+				map.put("imgurl", info.get(i).getSzImage());
 				lst.add(map);
 				timeList.add(MTools.datetimeToTimeMillis(info.get(i).getSzCreateTime()));
 			}

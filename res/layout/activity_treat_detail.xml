@@ -27,12 +27,13 @@
         android:textColor="@color/black6"
         android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/et_treat_record"
+    <TextView
+        android:id="@+id/tv_treat_record"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="30dp"
         android:layout_weight="1"
+        android:background="@drawable/shape_gray_strock"
         android:src="@drawable/user_icon" />
 
     <Button

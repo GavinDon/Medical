@@ -5,12 +5,20 @@ import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_GetCodeReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_GetServerInfoReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_LoginReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_AddMoodReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_CollectionNewsReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetHomeNewsReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsCommentListReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Mood_RecordReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_InfoReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Yongyao_InfoReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Yongyao_RecordReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_InfoReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_ReadNewsReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_SetNewsCommentReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_SetNewsCommentSupportReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eLOGIN_TYPE_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eNEWS_PRO;
@@ -202,6 +210,121 @@ public class HandleNetSendMsg {
 	}
 
 	/**
+	 * 用户评论请求
+	 */
+	public static byte[] HandleUserCommentPro(MsgInncDef.IUserCommentReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_SetNewsCommentReq_PRO.Builder builder = CmdMsgPro.CMD_SetNewsCommentReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.iUserId);
+		builder.setInewsid(Param.inewsid);// 资讯ID
+		builder.setSzcomment(Param.szComment);
+		// 建立消息内容
+		CMD_SetNewsCommentReq_PRO news_PRO = builder.build();
+		// 消息长度
+		int msgLength = news_PRO.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = news_PRO.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_PUSH_COMMENT_REQ, msgLength, msgLength, sequence,
+				0);
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+
+	/**
+	 * 获取评论列表请求
+	 */
+	public static byte[] HandleUserCommentListPro(MsgInncDef.ICommenListReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_GetNewsCommentListReq_PRO.Builder builder = CmdMsgPro.CMD_GetNewsCommentListReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.iUserId);
+		builder.setInewsid(Param.inewsid);// 资讯ID
+		// 建立消息内容
+		CMD_GetNewsCommentListReq_PRO news_PRO = builder.build();
+		// 消息长度
+		int msgLength = news_PRO.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = news_PRO.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_COMMENT_REQ, msgLength, msgLength, sequence,
+				0);
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+
+	/**
+	 *评论点赞请求
+	 */
+	public static byte[] HandleCommentZanPro(MsgInncDef.ICommenZanReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_SetNewsCommentSupportReq_PRO.Builder builder = CmdMsgPro.CMD_SetNewsCommentSupportReq_PRO
+				.newBuilder();
+
+		builder.setIuserid(Param.iUserId);
+		builder.setIcommentid(Param.iCommentid);// 	//评论ID
+		// 建立消息内容
+		CMD_SetNewsCommentSupportReq_PRO news_PRO = builder.build();
+		// 消息长度
+		int msgLength = news_PRO.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = news_PRO.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_COMMENTZAN_REQ, msgLength, msgLength, sequence,
+				0);
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+	/**
+	 *收藏资讯请求
+	 */
+	public static byte[] HandleCollectNewsPro(MsgInncDef.ICollectNewsReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_CollectionNewsReq_PRO.Builder builder = CmdMsgPro.CMD_CollectionNewsReq_PRO
+				.newBuilder();
+
+		builder.setIuserid(Param.iUserId);
+		builder.setInewsid(Param.inewsid);
+		builder.setType(Param.collectType);
+		// 建立消息内容
+		CMD_CollectionNewsReq_PRO news_PRO = builder.build();
+		// 消息长度
+		int msgLength = news_PRO.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = news_PRO.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_COLLECT_NEWS_REQ, msgLength, msgLength, sequence,
+				0);
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+
+	/**
 	 * 获取最优服务器请求
 	 */
 	public static byte[] HandleBestServerPro(MsgInncDef.AuthNetCommonReq Param, int sequence) {
@@ -235,10 +358,10 @@ public class HandleNetSendMsg {
 	public static byte[] HandlePhysicalRecordPro(MsgInncDef.IphsicalRecordReq Param, int sequence) {
 
 		// 组织序列化消息
-		CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.Builder builder = 	CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.newBuilder();
+		CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.newBuilder();
 
 		builder.setIuserid(Param.iUserId);
-		builder.setEPageType( Param.ePageType);
+		builder.setEPageType(Param.ePageType);
 		builder.setIRecoderNum(10);
 		builder.setIBeforRecoderid(Param.iBeforRecoderid);
 		builder.setSzBeforTime(Param.szBeforTime);
@@ -252,24 +375,25 @@ public class HandleNetSendMsg {
 		// 构建消息头
 		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
 		// 复制时此处不要忘记修改了=======
-		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_PHYSICAL_REQ, msgLength, msgLength,
-				sequence, 0);
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_PHYSICAL_REQ, msgLength, msgLength, sequence,
+				0);
 
 		// 拼接消息头和消息体
 		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
 
 		return msgByteArray;
 	}
+
 	/**
 	 * 治疗记录请求
 	 */
 	public static byte[] HandleTreatRecordPro(MsgInncDef.IphsicalRecordReq Param, int sequence) {
 
 		// 组织序列化消息
-		CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.Builder builder = 	CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.newBuilder();
+		CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Tijian_RecordReq_PRO.newBuilder();
 
 		builder.setIuserid(Param.iUserId);
-		builder.setEPageType( Param.ePageType);
+		builder.setEPageType(Param.ePageType);
 		builder.setIRecoderNum(10);
 		builder.setIBeforRecoderid(Param.iBeforRecoderid);
 		builder.setSzBeforTime(Param.szBeforTime);
@@ -283,7 +407,39 @@ public class HandleNetSendMsg {
 		// 构建消息头
 		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
 		// 复制时此处不要忘记修改了=======
-		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_TREAT_REQ, msgLength, msgLength,
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_TREAT_REQ, msgLength, msgLength, sequence, 0);
+
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+
+	/*
+	 * 用药记录列表 请求
+	 */
+	public static byte[] HandleMedicationsRecordPro(MsgInncDef.IphsicalRecordReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_Get_Yongyao_RecordReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Yongyao_RecordReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.iUserId);
+		builder.setEPageType(Param.ePageType);
+		builder.setIBeforRecoderid(Param.iBeforRecoderid);
+		builder.setIRecoderNum(Param.iRecoderNum);
+		builder.setSzBeforTime(Param.szBeforTime);
+
+		// 建立消息内容
+		CMD_Get_Yongyao_RecordReq_PRO pro = builder.build();
+		// 消息长度
+		int msgLength = pro.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = pro.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_MEDICATIONS__REQ, msgLength, msgLength,
 				sequence, 0);
 
 		// 拼接消息头和消息体
@@ -291,9 +447,35 @@ public class HandleNetSendMsg {
 
 		return msgByteArray;
 	}
-	
 
-	
+	/**
+	 * 用药记录祥情请求
+	 */
+	public static byte[] HandleMedicationsRecordDetailPro(MsgInncDef.ITreatRecordDetailReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_Get_Yongyao_InfoReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Yongyao_InfoReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.IUserId);
+		builder.setIRecordIndex(Param.iRecordIndex);
+		// 建立消息内容
+		CMD_Get_Yongyao_InfoReq_PRO pro = builder.build();
+		// 消息长度
+		int msgLength = pro.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = pro.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_MEDICATIONSDETAIL_REQ, msgLength, msgLength,
+				sequence, 0);
+
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
 
 	/**
 	 * 体检记录祥情请求
@@ -301,12 +483,12 @@ public class HandleNetSendMsg {
 	public static byte[] HandlePhysicalRecordDetailPro(MsgInncDef.IPhsicalRecordDetailReq Param, int sequence) {
 
 		// 组织序列化消息
-		CmdMsgPro.CMD_Get_Tijian_InfoReq_PRO.Builder builder = 	CmdMsgPro.CMD_Get_Tijian_InfoReq_PRO.newBuilder();
+		CmdMsgPro.CMD_Get_Tijian_InfoReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Tijian_InfoReq_PRO.newBuilder();
 
 		builder.setIuserid(Param.IUserId);
-	    builder.setIRecordIndex(Param.iRecordIndex);
+		builder.setIRecordIndex(Param.iRecordIndex);
 		// 建立消息内容
-	    CMD_Get_Tijian_InfoReq_PRO pro = builder.build();
+		CMD_Get_Tijian_InfoReq_PRO pro = builder.build();
 		// 消息长度
 		int msgLength = pro.getSerializedSize();
 		// 将消息序列化
@@ -323,14 +505,15 @@ public class HandleNetSendMsg {
 
 		return msgByteArray;
 	}
+
 	/**
 	 * 治疗记录祥情请求
 	 */
 	public static byte[] HandleTreatRecordDetailPro(MsgInncDef.ITreatRecordDetailReq Param, int sequence) {
-		
+
 		// 组织序列化消息
 		CmdMsgPro.CMD_Get_Zhiliao_InfoReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Zhiliao_InfoReq_PRO.newBuilder();
-		
+
 		builder.setIuserid(Param.IUserId);
 		builder.setIRecordIndex(Param.iRecordIndex);
 		// 建立消息内容
@@ -339,18 +522,75 @@ public class HandleNetSendMsg {
 		int msgLength = pro.getSerializedSize();
 		// 将消息序列化
 		byte[] msgProBody = pro.toByteArray();
-		
+
 		// 构建消息头
 		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
 		// 复制时此处不要忘记修改了=======
 		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_TREATDETAIL_REQ, msgLength, msgLength,
 				sequence, 0);
-		
+
 		// 拼接消息头和消息体
 		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
-		
+
 		return msgByteArray;
 	}
-	
 
+	/**
+	 * 心情列表请求
+	 */
+	public static byte[] HandleMoodRecordPro(MsgInncDef.IMoodRecordReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_Get_Mood_RecordReq_PRO.Builder builder = CmdMsgPro.CMD_Get_Mood_RecordReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.iUserId);
+		builder.setSzBeforTime(Param.szBeforTime);
+		builder.setIBeforRecoderid(Param.iBeforRecoderid);
+		builder.setIRecoderNum(Param.iRecoderNum);
+		// 建立消息内容
+		CMD_Get_Mood_RecordReq_PRO pro = builder.build();
+		// 消息长度
+		int msgLength = pro.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = pro.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_MOOD_REQ, msgLength, msgLength, sequence, 0);
+
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+
+	/**
+	 * 添加心情请求
+	 */
+	public static byte[] HandleAddMoodPro(MsgInncDef.IMoodAddReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_AddMoodReq_PRO.Builder builder = CmdMsgPro.CMD_AddMoodReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.iuserid);
+		builder.setIgrade(Param.iGrade);
+		builder.setSzContent(Param.szContent);
+		// 建立消息内容
+		CMD_AddMoodReq_PRO pro = builder.build();
+		// 消息长度
+		int msgLength = pro.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = pro.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_ADD_MOOD_REQ, msgLength, msgLength, sequence, 0);
+
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
 }

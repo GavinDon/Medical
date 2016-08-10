@@ -32,9 +32,10 @@ import com.sltj.medical.service.StepService;
 import com.sltj.medical.socketutil.HouseSocketConn;
 import com.sltj.medical.util.FixedSpeedScroller;
 import com.sltj.medical.util.LogUtils;
-import com.sltj.medical.util.ToastUtils;
+import com.sltj.medical.wedgit.CircleImageView;
 import com.sltj.medical.wedgit.RoundProgressBar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -42,6 +43,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,7 +53,9 @@ import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.DrawerLayout;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -85,7 +89,7 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 	private long TIME_INTERVAL = 500;
 	private TextView text_step;
 	private TextView text_cal;
-	private int step;//今日走路步数;
+	private int step;// 今日走路步数;
 
 	// 异步加载图片
 	private ImageLoader mImageLoader;
@@ -99,6 +103,7 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 	private Context mContext;
 	private RoundProgressBar stepProgress;
 	private LinearLayout ll_Step;
+	private CircleImageView ivUserIcon;
 
 	private PullToRefreshListView mPullListview;
 
@@ -142,6 +147,9 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 	 * 计算走了多少步
 	 */
 	private void setStep() {
+
+//		ivUserIcon = (CircleImageView) view.findViewById(R.id.slide_user);
+//		initDrawerLayout();
 		stepProgress = (RoundProgressBar) view.findViewById(R.id.pb_count);
 		stepProgress.setTextSize(18);
 		stepProgress.setMax(10000);
@@ -150,6 +158,7 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 		text_cal = (TextView) view.findViewById(R.id.tv_cal);
 		ll_Step = (LinearLayout) view.findViewById(R.id.ll_step);
 		ll_Step.setOnClickListener(this);
+//		ivUserIcon.setOnClickListener(this);
 		initListView();// 上拉加载下拉刷新
 
 	}
@@ -293,7 +302,7 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 	@SuppressWarnings("unchecked")
 	private void initListView() {
 		mPullListview = (PullToRefreshListView) view.findViewById(R.id.lv_hots);
-		mAdapter=new  HealthHotAdapter(mContext, lst);
+		mAdapter = new HealthHotAdapter(mContext, lst);
 		mPullListview.setAdapter(mAdapter);
 		mPullListview.setOnItemClickListener(this);
 
@@ -363,7 +372,7 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 			if (activity != null) {
 				switch (msg.what) {
 				case Config.MSG_FROM_SERVER:
-					 step = msg.getData().getInt("step");
+					step = msg.getData().getInt("step");
 					text_step.setText(step + "");
 					String cal = format.format(msg.getData().getDouble("cal"));
 					text_cal.setText(cal);
@@ -400,8 +409,9 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Map<String, Object> map = (Map<String, Object>) parent.getAdapter().getItem(position);
 		Net_NewsInfo_PRO info = (Net_NewsInfo_PRO) map.get("news");
-		ToastUtils.show(this.getActivity(), info.getId() + "", 0);
-		readNewsProbReq(info.getId());
+		Intent mIntent = new Intent(this.getActivity(), NewsDetailActivity.class);
+		mIntent.putExtra("newsId", String.valueOf(info.getId()));
+		startActivity(mIntent);
 	}
 	// ----------------以下为消息请求与解析处理----分割线-----------//
 
@@ -413,8 +423,9 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 	 */
 	private void newsProbReq() {
 		handler.sendEmptyMessageDelayed(Config.LOAD_DATA_OVERTIME, 4000);
-//		MyApplication.authSocketConn.closeAuthSocket();
-//		HouseSocketConn mSocket = new HouseSocketConn("218.30.21.157", 10011);
+		// MyApplication.authSocketConn.closeAuthSocket();
+		// HouseSocketConn mSocket = new HouseSocketConn("218.30.21.157",
+		// 10011);
 		seqHomeNews = MyApplication.SequenceNo++;
 		MsgInncDef.IhomeNewsReq homeNews = new MsgInncDef.IhomeNewsReq();
 		homeNews.iUserId = MyApplication.userId;
@@ -436,7 +447,7 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 				map.put("collect", info.get(i).getICollectionNum());
 				map.put("title", info.get(i).getSzTitle());
 				map.put("news", info.get(i));
-				String ss=info.get(i).getSzImage();
+				map.put("imgurl", info.get(i).getSzImage());
 				mAdapter.append(map);
 			}
 			mHandler.sendEmptyMessage(Config.LOAD_DATA_SUCCESS);
@@ -495,9 +506,31 @@ public class HomepageFragment extends Fragment implements OnClickListener, OnIte
 			mIntent.putExtra("todayStep", step);
 			startActivity(mIntent);
 			break;
+		case R.id.slide_user:
+			toggleLeftSliding();
+			break;
 
 		default:
 			break;
+		}
+	}
+/**
+ * 侧滑菜单用户中心
+ */
+	private DrawerLayout drawerLayout;
+
+	private void initDrawerLayout() {
+		drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer);
+		drawerLayout.setScrimColor(Color.TRANSPARENT);
+
+	}
+
+	@SuppressLint("InlinedApi")
+	private void toggleLeftSliding() {
+		if (drawerLayout.isDrawerOpen(Gravity.START)) {
+			drawerLayout.closeDrawer(Gravity.START);
+		} else {
+			drawerLayout.openDrawer(Gravity.START);
 		}
 	}
 

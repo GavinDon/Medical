@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.sltj.medical.adapter.PrivatorDoctorAdapter;
+import com.sltj.medical.util.LogUtils;
 import com.sltj.medical.util.ToastUtils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Contacts.SettingsColumns;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 /**
@@ -27,55 +32,49 @@ import android.widget.TextView;
  *
  */
 
-public class PrivateDoctor extends Fragment implements OnItemClickListener{
-	private ImageView ivBack;
-	private TextView tvTitle;
+public class PrivateDoctorFragment extends Fragment implements OnCheckedChangeListener {
 	private List<Map<String, String>> lst;
-	private ListView mListView;
 	private PrivatorDoctorAdapter mAdapter;
 	private Context mContext;
+	private RadioGroup mRadioGroup;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext=this.getActivity();
+		mContext = this.getActivity();
 		lst = new ArrayList<Map<String, String>>();
-		
+
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.activity_privatedoctor, null);
+		View v = inflater.inflate(R.layout.fragment_privatedoctor, null);
 		initView(v);
-		return null;
+		return v;
 	}
 
 	private void initView(View v) {
-		ivBack = (ImageView) v.findViewById(R.id.iv_back);
-		ivBack.setVisibility(View.INVISIBLE);
-		tvTitle = (TextView) v.findViewById(R.id.tv_title);
-		tvTitle.setText("健康管理");
-		mListView=(ListView) v.findViewById(R.id.lv_privator);
-		initData();
-		mListView.setOnItemClickListener(this);
-	}
-
-	private void initData() {
-		String[] item = new String[] { "体检记录", "治疗记录", "用药记录", "运动记录", "心情记录" };
-		for (int i = 0; i < item.length; i++) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("text", item[i]);
-			lst.add(map);
-		}
-		mAdapter=new PrivatorDoctorAdapter(mContext, lst);
-		mListView.setAdapter(mAdapter);
-		
+		mRadioGroup = (RadioGroup) v.findViewById(R.id.rg_privaterdoctor);
+		mRadioGroup.setOnCheckedChangeListener(this);
 
 	}
+
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		  ToastUtils.show(mContext, position+"", 0);
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		Intent mIntent = new Intent();
+		switch (checkedId) {
+		case R.id.rb_doctor:
+			break;
+		case R.id.rb_member:
+			// 会员
+			mIntent.setClass(this.mContext, MemberPrivateDoctorActivity.class);
+			startActivity(mIntent);
+			mRadioGroup.clearCheck();
+			
+			break;
+		}
+
 	}
 
 }

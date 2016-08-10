@@ -3,9 +3,9 @@ package com.sltj.medical.util;
 import java.util.ArrayList;
 
 import com.sltj.medical.HomepageFragment;
-import com.sltj.medical.MineFragment;
+import com.sltj.medical.HelathManagerFragment;
 import com.sltj.medical.NewsFragment;
-import com.sltj.medical.PrivateDoctor;
+import com.sltj.medical.PrivateDoctorFragment;
 import com.sltj.medical.ProductFragment;
 
 import android.support.v4.app.Fragment;
@@ -42,9 +42,9 @@ public class FragmentController {
 		fragments = new ArrayList<Fragment>();
 		fragments.add(new HomepageFragment());
 		fragments.add(new NewsFragment());
-		fragments.add(new PrivateDoctor());
+		fragments.add(new PrivateDoctorFragment());
 		fragments.add(new ProductFragment());
-		fragments.add(new MineFragment());
+		fragments.add(new HelathManagerFragment());
 		// hide与replace切换时 注释掉下面这段代码
 		// ------------------------//
 		FragmentTransaction ft = fm.beginTransaction();

@@ -2,6 +2,7 @@ package com.sltj.medical;
 
 import java.util.Map;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.base.MyApplication;
 import com.sltj.medical.config.Define;
@@ -13,14 +14,11 @@ import com.sltj.medical.publicMsg.MsgReceiveDef;
 import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalDetailResp;
 import com.sltj.medical.socketutil.HouseSocketConn;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,13 +33,15 @@ public class RecordDetailActivity extends BaseActivity {
 	private ImageView ivRecord;
 	private Button BtnSave;
 	private String recordIndex;
-
+	private ImageLoader loader;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_record_detail);
 		map = (Map<String, String>) getIntent().getSerializableExtra("recordDetail");
 		recordIndex = map.get("index");
+	
+
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Define.BROAD_CAST_RECV_DATA_COMPLETE);
@@ -53,6 +53,7 @@ public class RecordDetailActivity extends BaseActivity {
 
 	@Override
 	public void initView() {
+		loader = ImageLoader.getInstance();
 		tvdetail = (TextView) findViewById(R.id.tv_detail);
 		tvTime = (TextView) findViewById(R.id.tv_detail_time);
 		ivRecord = (ImageView) findViewById(R.id.iv_physical_record);
@@ -89,6 +90,7 @@ public class RecordDetailActivity extends BaseActivity {
 				.queryCompleteMsg(recvTime);
 		Net_Tijian_RecoderInfo_PRO info = resp.info;
 		String url = resp.Szurl;
+		loader.displayImage(url, ivRecord);
 	}
 
 	BroadcastReceiver mReciver = new BroadcastReceiver() {

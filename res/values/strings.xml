@@ -16,5 +16,12 @@
     <string name="title_activity_record_detail">RecordDetailActivity</string>
     <string name="title_activity_treat_record">TreatRecordActivity</string>
     <string name="title_activity_treat_detail">TreatDetailActivity</string>
+    <string name="title_activity_medications">MedicationsActivity</string>
+    <string name="title_activity_mood_record">MoodRecordActivity</string>
+    <string name="title_activity_and_mood">AndMoodActivity</string>
+    <string name="title_activity_news_detail">NewsDetailActivity</string>
+    <string name="title_activity_comment_list">CommentListActivity</string>
+    <string name="title_activity_drawer_layout">DrawerLayoutActivity</string>
+    <string name="title_activity_member_private_doctor">MemberPrivateDoctorActivity</string>
 
 </resources>

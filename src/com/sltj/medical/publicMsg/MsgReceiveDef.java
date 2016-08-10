@@ -3,11 +3,15 @@ package com.sltj.medical.publicMsg;
 import java.util.List;
 
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_RecordResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.EnumPro.eMSG_OPER_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eOPERRESULT_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_CommentInfo_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Mood_RecoderInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_NewsInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_ServerInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Tijian_RecoderInfo_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Yongyao_RecoderInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Zhiliao_RecoderInfo_PRO;
 
 public class MsgReceiveDef {
@@ -87,11 +91,46 @@ public class MsgReceiveDef {
 	}
 
 	/**
-	 * 阅读资讯
+	 * 阅读资讯响应
 	 */
 	public static class ReadNewsResp {
 		public eOPERRESULT_PRO eResult;// 操作结果
 		public int newsId;// 资讯信息
+	}
+
+	/**
+	 * 收藏资讯响应
+	 */
+	public static class CollectNewsResp {
+		public eOPERRESULT_PRO eResult;
+		public int iNewsId; // 资讯ID
+		public eMSG_OPER_PRO collectType; // 增加为收藏，删除为取消收藏
+	}
+
+	/**
+	 * 用户评论响应
+	 */
+	public static class UserCommentResp {
+		public eOPERRESULT_PRO eResult;
+		public int iCommentNum;// 评论后的资讯评论值
+	}
+
+	/**
+	 * 获取评论列表响应
+	 */
+	public static class CommentListResp {
+		public eOPERRESULT_PRO eResult;
+		public int iNewsId; // 资讯ID
+		public List<Net_CommentInfo_PRO> info; // 增加为收藏，删除为取消收藏
+	}
+
+	/**
+	 * 获取评论点赞响应
+	 */
+	public static class CommentZanResp {
+		public eOPERRESULT_PRO eResult;
+		public int iCommentId; // //评论ID
+		public int iSupportNum; // 点赞数
 	}
 
 	/**
@@ -103,6 +142,7 @@ public class MsgReceiveDef {
 		public String szTime;// 获取这个时间之后的资讯
 		public List<Net_Tijian_RecoderInfo_PRO> info;
 	}
+
 	/**
 	 * 获取治疗响应消息
 	 */
@@ -112,6 +152,17 @@ public class MsgReceiveDef {
 		public String szTime;// 获取这个时间之后的资讯
 		public List<Net_Zhiliao_RecoderInfo_PRO> info;
 	}
+
+	/**
+	 * 获取用药记录响应消息
+	 */
+	public static class MedicationsResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public ePAGE_TYPE_PRO ePageType;// 获取时间点前的还是后的资讯
+		public String szTime;// 获取这个时间之后的资讯
+		public List<Net_Yongyao_RecoderInfo_PRO> info;// 用药记录
+	}
+
 	/**
 	 * 获取体检记录详情响应消息
 	 */
@@ -120,56 +171,43 @@ public class MsgReceiveDef {
 		public Net_Tijian_RecoderInfo_PRO info;
 		public String Szurl;
 	}
+
 	/**
 	 * 获取治疗详情响应消息
 	 */
 	public static class TreatDetailResp {
 		public eOPERRESULT_PRO eResult;// 操作结果
 		public Net_Zhiliao_RecoderInfo_PRO info;
-		public String szContent; 
+		public String szContent;
+	}
+
+	/**
+	 * 用药记录祥情响应
+	 */
+	public static class MedicaltionsDetailResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public String szContent; // 用药详细内容，文字
+		public Net_Yongyao_RecoderInfo_PRO info;
+	}
+
+	/**
+	 * 心情记录响应
+	 */
+	public static class MoodRecordResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public int iAverage; // 今天心情评分
+		public String szTime;
+		public List<Net_Mood_RecoderInfo_PRO> info;// 心情记录
+	}
+
+	/**
+	 * 添加心情响应
+	 */
+	public static class AddMoodResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public int iRecordIndex; // 添加成功返回心情ID
 	}
 
 	// ============================通知类消息================================
-
-	/**
-	 * 家政服务--通用通知消息
-	 */
-	public static class HsCommon_Notify {
-		public int uUserID; // 为用户生成一个唯一的ID;
-		public int uCompanyID; // 为公司成一个唯一的ID;
-		public int iOrderID;
-	}
-
-	/**
-	 * 家政公司抢单成功的通知
-	 *
-	 */
-	public static class HsCmpRaceOrder_Notify {
-		public int uCompanyID; // 公司ID；
-		public int uOrderID; // 订单ID;
-		public String szSrvPrice; // 服务价格
-		public String szRemark; // 抢单说明信息;
-	}
-
-	/**
-	 * 家政公司提请申诉通知
-	 *
-	 */
-	public static class HsCompanyComplain_Notify {
-		public int uOrderID; // 订单ID;
-		public int uUserID; // 提交申诉的公司ID
-		public String szContent; // 申诉内容
-	}
-
-	/**
-	 * 家政公司审批结果通知
-	 *
-	 */
-	public static class HsCmpRefuseAtticheResult_Notify {
-		public int iCompanyID; // 公司唯一标示;
-		public int uUserID; // 用户唯一标示
-		public int uResult; // 审批结果， 0为同意，1为拒绝
-		public String szRejReason; // 拒绝原因(拒绝时有效)
-	}
 
 }

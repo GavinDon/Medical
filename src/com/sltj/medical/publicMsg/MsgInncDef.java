@@ -1,6 +1,7 @@
 package com.sltj.medical.publicMsg;
 
 import com.sltj.medical.base.MyApplication;
+import com.sltj.medical.dataUtil.protobuf.EnumPro.eMSG_OPER_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
 
 public final class MsgInncDef {
@@ -107,7 +108,7 @@ public final class MsgInncDef {
 	}
 
 	/**
-	 * 获取资讯列表
+	 * 阅读资讯请求
 	 */
 	public static class IReadNewsReq {
 		public int iUserId; // 用户ID
@@ -116,7 +117,43 @@ public final class MsgInncDef {
 	}
 
 	/**
-	 * 获取体检记录列表
+	 * 收藏资讯请求
+	 */
+	public static class ICollectNewsReq {
+		public int iUserId; // 用户ID
+		public int inewsid; // 资讯ID
+		public eMSG_OPER_PRO collectType; // 资讯ID
+
+	}
+	/**
+	 * 用户发表评论请求
+	 */
+	public static class IUserCommentReq {
+		public int iUserId; // 用户ID
+		public int inewsid; // 资讯ID
+		public String szComment; //	//评论的内容
+	}
+	/**
+	 * 评论列表请求
+	 */
+	public static class ICommenListReq {
+		public int iUserId; // 用户ID
+		public int inewsid; // 资讯ID
+
+	}
+	/**
+	 * 评论点赞请求
+	 */
+	public static class ICommenZanReq {
+		public int iUserId; // 用户ID
+		public int iCommentid; // 评论ID
+
+	}
+	
+	
+
+	/**
+	 * 获取体检记录列表-治疗记录-用药记录 请求参数一样（消息类型是不一样的。）
 	 */
 	public static class IphsicalRecordReq {
 		public int iUserId; // 用户ID
@@ -125,21 +162,50 @@ public final class MsgInncDef {
 		public int iRecoderNum;// 一次获取多少条消息
 		public int iBeforRecoderid;// 这条记录之前的消息，每条消息发送成功会返还一个消息ID
 	}
+
 	/**
 	 * 获取体检记录详情
 	 *
 	 */
-	public static class IPhsicalRecordDetailReq{
+	public static class IPhsicalRecordDetailReq {
 		public int IUserId;
-		public int iRecordIndex;
+		public int iRecordIndex; // 记录索引号
 	}
+
 	/**
 	 * 获取治疗记录详情
 	 *
 	 */
-	public static class ITreatRecordDetailReq{
+	public static class ITreatRecordDetailReq {
 		public int IUserId;
-		public int iRecordIndex;
+		public int iRecordIndex; // 记录索引号
+	}
+
+	// /**
+	// * 获取用药记录祥情
+	// */
+	// public static class IMedicationsDetailRecordReq {
+	// public int IUserId;
+	// public int iRecordIndex;// 记录索引号
+	// }
+	/**
+	 * 获取心情记录列表
+	 */
+	public static class IMoodRecordReq {
+		public int iUserId; // 用户ID
+		public String szBeforTime; // 这个时间点
+		public int iRecoderNum;// 一次获取多少条消息
+		public int iBeforRecoderid;// 这条记录之前的消息，每条消息发送成功会返还一个消息ID
+	}
+
+	/**
+	 * 添加心情请求参数
+	 *
+	 */
+	public static class IMoodAddReq {
+		public int iuserid; //
+		public int iGrade; // 记录评分
+		public String szContent;// 消息内容
 	}
 
 	// -------------------------------------------------------------------------------------//
@@ -227,207 +293,5 @@ public final class MsgInncDef {
 	}
 
 	// ============================以下为家政消息================================
-
-	/**
-	 * 家政服务-通用请求
-	 */
-	public class HsNetCommon_Req {
-		public int iSrcID; // 为用户生成一个唯一的ID（必须）
-		public int iSelectID; // 选定的乙方唯一ID（可能是订单ID，也可能是用户ID或公司ID）
-
-		public void buildMsg(int iSrcID, int iSelectID) {
-			this.iSrcID = iSrcID;
-			this.iSelectID = iSelectID;
-		}
-	}
-
-	/**
-	 * 家政服务--通用通知消息
-	 */
-	public class HsCommon_Notify {
-		public int uUserID; // 为用户生成一个唯一的ID;(必须)
-		public int uCompanyID; // 为公司成一个唯一的ID;
-		public int iOrderID;
-
-		public void buildMsg(int uUserID, int uCompanyID, int iOrderID) {
-			this.uUserID = uUserID;
-			this.uCompanyID = uCompanyID;
-			this.iOrderID = iOrderID;
-		}
-	}
-
-	/*
-	 * 首页家政结构体请求
-	 */
-	public class HsAppHomenInfo_Req {
-		public int bGetHome; // true:提取【首页】订单类型数据， false:提取【更多】订单类型数据
-								// --(使用1表示true,0表示false)
-		public int iUserID; // 保存的用户ID
-
-		public void buildMsg(int bGetHome, int iUserID) {
-			this.bGetHome = bGetHome;
-			this.iUserID = iUserID;
-		}
-	}
-
-	/*
-	 * 广播下单请求消息
-	 */
-	public class HsBroadCastOrderInfo_Req {
-		public int uUserID; // 用户ID;（必须）
-		public int uCompanyID; // 公司ID--预约下单时有效
-		public int iOrderTypeID; // 下单类型
-		public int iUsrSrvedIndex; // 服务地址索引
-		public String szSrvBeginTime; // 服务开始时间
-		public String szUnitArea; // 单位面积
-		public String szHeartPrice; // 心理价位
-		public String szReMark; // 备注信息;
-
-		public void buildMsg(int uUserID, int uCompanyID, int iOrderTypeID, int iUsrSrvedIndex, String szSrvBeginTime,
-				String szUnitArea, String szHeartPrice, String szReMark) {
-			this.uUserID = uUserID;
-			this.uCompanyID = uCompanyID;
-			this.iOrderTypeID = iOrderTypeID;
-			this.iUsrSrvedIndex = iUsrSrvedIndex;
-			this.szSrvBeginTime = szSrvBeginTime;
-			this.szUnitArea = szUnitArea;
-			this.szHeartPrice = szHeartPrice;
-			this.szReMark = szReMark;
-		}
-	}
-
-	/*
-	 * 预约下单请求消息
-	 */
-	public class HsSubScribeOrderInfo_Req {
-		public int uUserID; // 用户ID;
-		public int uCompanyID; // 公司ID--预约下单时有效
-		public int iOrderTypeID; // 下单类型
-		public int iUsrSrvedIndex; // 服务地址索引
-		public String szSrvBeginTime; // 服务开始时间
-		public String szServiceItem; // 服务清单
-		public String szSrvPrice; // 服务价格
-		public String szReMark; // 备注信息;
-	}
-
-	/*
-	 * 订单评价信息（评价）
-	 */
-	public class HsUserOrderValuate_Req {
-		public int uCompanyID; // 公司ID
-
-		public int uUserID; // 用户ID
-		public int iOrderID; // 订单ID
-		public int iGiveStar; // 给定星级
-		public String szRemark; // 评价内容
-		public String szPicUrl; // 评价内容
-
-		public void buildMsg(int uCompanyID, int uUserID, int iOrderID, int iGiveStar, String szRemark,
-				String szPicUrl) {
-			this.uCompanyID = uCompanyID;
-			this.uUserID = uUserID;
-			this.iOrderID = iOrderID;
-			this.iGiveStar = iGiveStar;
-			this.szRemark = szRemark;
-			this.szPicUrl = szPicUrl;
-		}
-	}
-
-	/*
-	 * 用户提请申诉请求(投诉)
-	 */
-	public class HsUserAskAppeal_Req {
-		public int uUserID;// 用户id(必须)
-		public int uCompanyID;// 公司id(必须)
-		public int iOrderID;// 订单id(必须)
-		public String szApperlClass; // 投诉类别
-		public String szReason;// 投诉原因
-
-		public void buildMsg(int uUserID, int uCompanyID, int iOrderID, String szApperlClass, String szReason) {
-			this.uUserID = uUserID;
-			this.uCompanyID = uCompanyID;
-			this.iOrderID = iOrderID;
-			this.szApperlClass = szApperlClass;
-			this.szReason = szReason;
-		}
-	}
-
-	/*
-	 * 用户加入指定公司请求(加入明星公司)
-	 */
-	public class HsUserAddCompany_Req {
-		public int uUserID; // 用户ID(必须)
-		public int uCompanyID; // 家政公司ID(必须)
-		public int iSrvType; // 服务类型；
-		public String szName; // 用户名(必须)
-		public String szLinkTel; // 联系电话(必须)
-		public String szCurAddr; // 现居住址(必须)
-		public String szRemark; // 个人介绍;
-
-		public void buildMsg(int uUserID, int uCompanyID, int iSrvType, String szName, String szLinkTel,
-				String szCurAddr, String szRemark) {
-			this.uUserID = uUserID;
-			this.uCompanyID = uCompanyID;
-			this.iSrvType = iSrvType;
-			this.szName = szName;
-			this.szLinkTel = szLinkTel;
-			this.szCurAddr = szCurAddr;
-			this.szRemark = szRemark;
-		}
-	}
-
-	/*
-	 * 用户退出指定公司请求(退出明星公司)
-	 */
-	public class HsUserQuitComany_Req {
-		public int uUserID; // 用户ID
-		public int uCompanyID; // 公司ID
-		public String szRemark; // 退出原因
-
-		public void buildMsg(int uUserID, int uCompanyID, String szRemark) {
-			this.uUserID = uUserID;
-			this.uCompanyID = uCompanyID;
-			this.szRemark = szRemark;
-		}
-	}
-
-	/*
-	 * 用户确认付款请求
-	 */
-	public class HsUserSurePay_Req {
-		public int uUserID; // 用户ID(必须)
-		public int iOrderID; // 订单ID(必须)
-		public String szPrice; // 付款单价
-
-		public void buildMsg(int uUserID, int iOrderID, String szPrice) {
-			this.uUserID = uUserID;
-			this.iOrderID = iOrderID;
-			this.szPrice = szPrice;
-		}
-	}
-
-	/*
-	 * 用户添加服务联系地址 请求
-	 */
-	public class HsUserServiceAddrInfo_Req {
-		public int uUserID; // 用户ID（必须）
-
-		public int uAreaID; // 地址区域ID
-		public int uAddrIndex; // 地址序号（必须）
-		public String szUserName; // 联系人名
-		public String szUserTel; // 联系人电话
-		public String szUserAddr; // 联系人地址
-
-		public void buildMsg(int uUserID, int uAreaID, int uAddrIndex, String szUserName, String szUserTel,
-				String szUserAddr) {
-			this.uUserID = uUserID;
-			this.uAreaID = uAreaID;
-			this.uAddrIndex = uAddrIndex;
-			this.szUserName = szUserName;
-			this.szUserTel = szUserTel;
-			this.szUserAddr = szUserAddr;
-		}
-
-	}
 
 }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sltj.medical.adapter.MineZoneAdapter;
+import com.sltj.medical.adapter.HeathManagerAdapter;
 import com.sltj.medical.base.BaseActivity;
 
 import android.content.Intent;
@@ -24,7 +24,7 @@ import android.widget.TextView;
 public class HealthManagerActivity extends BaseActivity implements OnItemClickListener {
 	private ListView mListView;
 	private List<Map<String, Object>> lst = new ArrayList<Map<String, Object>>();
-	private MineZoneAdapter mAdapter;
+	private HeathManagerAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class HealthManagerActivity extends BaseActivity implements OnItemClickLi
 	@Override
 	public void setupData() {
 		initData();
-		mAdapter = new MineZoneAdapter(this, lst);
+		mAdapter = new HeathManagerAdapter(this, lst);
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
 	}
@@ -71,11 +71,16 @@ public class HealthManagerActivity extends BaseActivity implements OnItemClickLi
 			startActivity(mIntent);
 			break;
 		case 2:
+			mIntent.setClass(this, MedicationsActivity.class);
+			startActivity(mIntent);
 			break;
 		case 3:
+			mIntent.setClass(this, StepDetailActivity.class);
+			startActivity(mIntent);
 			break;
 		case 4:
-
+			mIntent.setClass(this, MoodRecordActivity.class);
+			startActivity(mIntent);
 			break;
 
 		}

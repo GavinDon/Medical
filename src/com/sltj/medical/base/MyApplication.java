@@ -2,6 +2,7 @@ package com.sltj.medical.base;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.PushbackInputStream;
 import java.util.Map;
 
 import org.apache.http.util.EncodingUtils;
@@ -275,9 +276,11 @@ public class MyApplication extends Application {
 			netParam.setAuthIp(linkObj.getString("ip"));
 //			netParam.setAuthDns(linkObj.getString("dns"));
 			netParam.setAuthPort(linkObj.getInt("port"));
-			// netParam.setStrIp(linkObj.getString("ip"));
-			// netParam.setiPort(linkObj.getInt("port"));
-			// netParam.setStrDns(linkObj.getString("dns"));
+			PushData.setAuthIp(linkObj.getString("ip"));
+			PushData.setAuthPort(linkObj.getInt("port"));
+//			 netParam.setStrIp(linkObj.getString("ip"));
+//			 netParam.setiPort(linkObj.getInt("port"));
+//			 netParam.setStrDns(linkObj.getString("dns"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

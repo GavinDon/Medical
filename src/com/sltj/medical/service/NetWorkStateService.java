@@ -45,7 +45,7 @@ public class NetWorkStateService extends Service {
 	Handler handler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 //				showNetWorkDialog();
-			ToastUtils.show(getApplicationContext(), "网络连接错误", 0);
+			ToastUtils.show(getApplicationContext(), "网络未连接", 1);
 		}
 	};
 	
@@ -188,13 +188,13 @@ public class NetWorkStateService extends Service {
 			}
 			
 			if (MyApplication.houseSocketConn == null) {
-
+//
 //				LogUtils.w("MyApplication.houseSocketConn == null ");
-				
+//				
 //				MyApplication.houseSocketConn = new HouseSocketConn(
 //						PushData.getHouseIp(), PushData.getHousePort());
 //				loadConnectHsDataBroad();
-
+//
 			} else {
 
 				if (MyApplication.houseSocketConn.isClose()) {
@@ -215,7 +215,7 @@ public class NetWorkStateService extends Service {
 					}
 				} else {
 					
-					LogUtils.w("checkLinkTimeOut = " + checkLinkTimeOut);
+//					LogUtils.w("checkLinkTimeOut = " + checkLinkTimeOut);
 
 					if (!MyApplication.houseSocketConn.isRecvDataFlag) {
 						checkLinkTimeOut++;
@@ -253,7 +253,7 @@ public class NetWorkStateService extends Service {
 		SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.ERROR_TYPE);
 		sweetAlertDialog.setTitleText("没网啦！");
 		sweetAlertDialog.setCancelText("取消");
-		sweetAlertDialog.setConfirmText("确定");
+		sweetAlertDialog.setConfirmText("打开网络");
 		sweetAlertDialog.setCanceledOnTouchOutside(true);
 		sweetAlertDialog.setConfirmClickListener(new OnSweetClickListener() {
 			
@@ -312,14 +312,14 @@ public class NetWorkStateService extends Service {
 				//无网进入app，未登录，当有网时需要解析域名，并创建登录认证socket，并发送连接登录认证服务器请求
 				new Thread(runnable).start();
 			}
-//			else{
-//				//有网进入app，未登录，当网络断开后重新连接时，需要创建登录认证socket，并发送连接登录认证服务器请求
-//				if(MyApplication.authSocketConn != null){
-//					MyApplication.authSocketConn.closeAuthSocket();
-//				}
-//				MyApplication.authSocketConn = new AuthSocketConn(PushData.getAuthIp(), PushData.getAuthPort());
-//				loadConnectAuthDataBroad();
-//			}
+			else{
+				//有网进入app，未登录，当网络断开后重新连接时，需要创建登录认证socket，并发送连接登录认证服务器请求
+				if(MyApplication.authSocketConn != null){
+					MyApplication.authSocketConn.closeAuthSocket();
+				}
+				MyApplication.authSocketConn = new AuthSocketConn(PushData.getAuthIp(), PushData.getAuthPort());
+				loadConnectAuthDataBroad();
+			}
 		}
 	}
 	
@@ -382,11 +382,11 @@ public class NetWorkStateService extends Service {
 				}
 				
 			}
-//			LogUtils.i("创建 Auth socket");
-//			if(MyApplication.authSocketConn != null){
-//				MyApplication.authSocketConn.closeAuthSocket();
-//			}
-//			MyApplication.authSocketConn = new AuthSocketConn(PushData.getAuthIp(), PushData.getAuthPort());
+			LogUtils.i("创建 Auth socket");
+			if(MyApplication.authSocketConn != null){
+				MyApplication.authSocketConn.closeAuthSocket();
+			}
+			MyApplication.authSocketConn = new AuthSocketConn(PushData.getAuthIp(), PushData.getAuthPort());
 			loadConnectAuthDataBroad();
 		}
 	};

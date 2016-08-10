@@ -87,11 +87,11 @@ public class RoundProgressBar extends View {
 		// 获取自定义属性和默认值
 		roundColor = mTypedArray.getColor(R.styleable.RoundProgressBar_roundColor, Color.LTGRAY);
 		roundProgressColor = mTypedArray.getColor(R.styleable.RoundProgressBar_roundProgressColor,
-				context.getResources().getColor(R.color.pink));
+				context.getResources().getColor(R.color.blue));
 		textColor = mTypedArray.getColor(R.styleable.RoundProgressBar_textColor,
 				context.getResources().getColor(R.color.orange));
 		textSize = mTypedArray.getDimension(R.styleable.RoundProgressBar_textSize, 20);
-		roundWidth = mTypedArray.getDimension(R.styleable.RoundProgressBar_roundWidth, 6);
+		roundWidth = mTypedArray.getDimension(R.styleable.RoundProgressBar_roundWidth, 4);
 		max = mTypedArray.getInteger(R.styleable.RoundProgressBar_max, 10000);
 		textIsDisplayable = mTypedArray.getBoolean(R.styleable.RoundProgressBar_textIsDisplayable, true);
 		style = mTypedArray.getInt(R.styleable.RoundProgressBar_style, 0);
@@ -141,13 +141,13 @@ public class RoundProgressBar extends View {
 		switch (style) {
 		case STROKE: {
 			paint.setStyle(Paint.Style.STROKE);
-			canvas.drawArc(oval, 0, 360 * progress / max, false, paint); // 根据进度画圆弧
+			canvas.drawArc(oval, 270, 360 * progress / max, false, paint); // 根据进度画圆弧
 			break;
 		}
 		case FILL: {
 			paint.setStyle(Paint.Style.FILL_AND_STROKE);
 			if (progress != 0)
-				canvas.drawArc(oval, 0, 360 * progress / max, true, paint); // 根据进度画圆弧
+				canvas.drawArc(oval, 270, 360 * progress / max, true, paint); // 根据进度画圆弧
 			break;
 		}
 		}

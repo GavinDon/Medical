@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.fiter.pulltorefresh.PullToRefreshBase;
-import com.fiter.pulltorefresh.PullToRefreshListView;
 import com.fiter.pulltorefresh.PullToRefreshBase.Mode;
 import com.fiter.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
+import com.fiter.pulltorefresh.PullToRefreshListView;
 import com.sltj.medical.adapter.RecordAdapter;
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.base.MyApplication;
@@ -19,21 +19,17 @@ import com.sltj.medical.config.Config;
 import com.sltj.medical.config.Define;
 import com.sltj.medical.dataUtil.HandleMsgDistribute;
 import com.sltj.medical.dataUtil.HandleNetSendMsg;
-import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
-import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Tijian_RecoderInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Zhiliao_RecoderInfo_PRO;
 import com.sltj.medical.publicMsg.MsgInncDef;
-import com.sltj.medical.publicMsg.MsgReceiveDef;
 import com.sltj.medical.publicMsg.MsgInncDef.OnrefreshFlag;
-import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef;
 import com.sltj.medical.publicMsg.MsgReceiveDef.TreatResp;
 import com.sltj.medical.socketutil.HouseSocketConn;
 import com.sltj.medical.util.MTools;
 import com.sltj.medical.util.ToastUtils;
 import com.sltj.medical.wedgit.LoadingDialog;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,15 +37,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+/**
+ * 治疗记录页面
+ * 
+ * @author linan
+ */
 public class TreatRecordActivity extends BaseActivity implements OnItemClickListener {
 	private int seqTreatRecord;
 	private PullToRefreshListView mPullListView;
@@ -192,10 +190,10 @@ public class TreatRecordActivity extends BaseActivity implements OnItemClickList
 			Collections.sort(timeList, reverseOrder);
 			mAdapter = new RecordAdapter(this, lst);
 			mPullListView.setAdapter(mAdapter);
+			handler.sendEmptyMessage(Config.LOAD_DATA_SUCCESS);
 		} else {
 			ToastUtils.show(this, "没有更多啦", 0);
 		}
-		handler.sendEmptyMessage(Config.LOAD_DATA_SUCCESS);
 	}
 
 	BroadcastReceiver mReciver = new BroadcastReceiver() {

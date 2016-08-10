@@ -49,8 +49,9 @@ public class HealthHotAdapter extends MyBaseAdapter<Map<String, Object>> {
 		tvTitle.setText(map.get("title").toString());
 		tvRead.setText(map.get("read") + "阅读");
 		tvCollect.setText(map.get("collect") + "收藏");
+		String url=String.valueOf(map.get("imgurl"));
 		
-		loader.displayImage(img[2], image);
+		loader.displayImage(url, image);
 	}
 
 	String img[] = {

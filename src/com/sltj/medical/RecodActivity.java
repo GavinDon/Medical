@@ -15,6 +15,7 @@ import com.fiter.pulltorefresh.PullToRefreshListView;
 import com.sltj.medical.adapter.RecordAdapter;
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.base.MyApplication;
+import com.sltj.medical.base.ViewHolder;
 import com.sltj.medical.config.Config;
 import com.sltj.medical.config.Define;
 import com.sltj.medical.dataUtil.HandleMsgDistribute;
@@ -41,14 +42,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
  * 体检记录页面
  * 
- * @author Administrator
- *
+ * @author linan
  */
 public class RecodActivity extends BaseActivity implements OnItemClickListener {
 	private PullToRefreshListView mPullListView;
@@ -136,12 +137,14 @@ public class RecodActivity extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Map<String, String>map=(Map<String, String>) parent.getAdapter().getItem(position);
-		Intent mIntent=new Intent(this,RecordDetailActivity.class);
-		mIntent.putExtra("recordDetail", (Serializable)map);
+		Map<String, String> map = (Map<String, String>) parent.getAdapter().getItem(position);
+		String recordIndex=map.get("index");
+		ViewHolder vh=(ViewHolder) view.getTag();
+		ImageView ivLook=vh.getView(ImageView.class, R.id.iv_look);
+		ivLook.setImageResource(R.drawable.eye_inv);
+		Intent mIntent = new Intent(this, RecordDetailActivity.class);
+		mIntent.putExtra("recordDetail", (Serializable) map);
 		startActivity(mIntent);
-		
-		
 
 	}
 
@@ -157,10 +160,10 @@ public class RecodActivity extends BaseActivity implements OnItemClickListener {
 		recordReq.iRecoderNum = 10;
 		recordReq.ePageType = ePAGE_TYPE_PRO.EN_PAGE_OLD_PRO;
 		recordReq.iBeforRecoderid = 1000;
-		//判断是什么操作(上拉下拉)
+		// 判断是什么操作(上拉下拉)
 		if (freshFlag == OnrefreshFlag.REFRESH_PullUp) {
 			if (freshFlag == OnrefreshFlag.REFRESH_PullUp) {
-				//根据状态选则timelist中的时间去请求服务器
+				// 根据状态选则timelist中的时间去请求服务器
 				if (!timeList.isEmpty()) {
 					recordReq.szBeforTime = MTools.getTimeYMDHMS(timeList.get(timeList.size() - 1));
 				} else {
@@ -178,7 +181,9 @@ public class RecodActivity extends BaseActivity implements OnItemClickListener {
 	 * 体检记录响应
 	 */
 	private void phsicalProResp(Long recvTime) {
-		mDialog.dismiss();
+		if(mDialog!=null){
+			mDialog.dismiss();
+		}
 		MsgReceiveDef.PhysicalResp resp = (PhysicalResp) HandleMsgDistribute.getInstance().queryCompleteMsg(recvTime);
 		List<Net_Tijian_RecoderInfo_PRO> list = resp.info;
 		if (!list.isEmpty()) {
@@ -186,18 +191,18 @@ public class RecodActivity extends BaseActivity implements OnItemClickListener {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("date", list.get(i).getSzCreateTime());
 				map.put("title", list.get(i).getSzContent());
-				map.put("treatDoctor", "-1");//代表体检记录视图
-				map.put("index",String.valueOf(list.get(i).getIRecordIndex()));
+				map.put("treatDoctor", "-1");// 代表体检记录视图
+				map.put("index", String.valueOf(list.get(i).getIRecordIndex()));
 				lst.add(map);
 				timeList.add(MTools.datetimeToTimeMillis(list.get(i).getSzCreateTime()));
 			}
 			Collections.sort(timeList, reverseOrder);
 			mAdapter = new RecordAdapter(this, lst);
 			mPullListView.setAdapter(mAdapter);
+			handler.sendEmptyMessage(Config.LOAD_DATA_SUCCESS);
 		} else {
 			ToastUtils.show(this, "没有更多啦", 0);
 		}
-		handler.sendEmptyMessage(Config.LOAD_DATA_SUCCESS);
 	}
 
 	BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -230,5 +235,11 @@ public class RecodActivity extends BaseActivity implements OnItemClickListener {
 			}
 		});
 
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		this.unregisterReceiver(mReceiver);
 	}
 }

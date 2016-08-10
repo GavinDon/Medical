@@ -6,22 +6,38 @@ import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_GetCodeResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_GetServerInfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_LoginResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_AddMoodResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_CollectionNewsResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetHomeNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsCommentListResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Mood_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_InfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_RecordResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Yongyao_InfoResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Yongyao_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_InfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Zhiliao_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_ReadNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_SetNewsCommentResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_SetNewsCommentSupportReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_SetNewsCommentSupportResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.NetConnectResp_PRO_MSG;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_CommonResp_PRO_MSG;
 import com.sltj.medical.publicMsg.MsgReceiveDef;
+import com.sltj.medical.publicMsg.MsgReceiveDef.AddMoodResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.AuthLoginResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.AuthNetCommonResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.AuthcodeResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.CollectNewsResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.CommentListResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.CommentZanResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.HomeNewsResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.MedicaltionsDetailResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.MedicationsResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.MoodRecordResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NetBestServerResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NetConnectResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NewsResp;
@@ -30,6 +46,7 @@ import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.ReadNewsResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.TreatDetailResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.TreatResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.UserCommentResp;
 import com.sltj.medical.publicMsg.NetHouseMsgType;
 
 /**
@@ -98,8 +115,30 @@ public class HandleNetReceiveMsg {
 		case NetHouseMsgType.CMD_GET_TREATDETAIL_RESP:// 治疗记录祥情
 			obj = HandleTreatDetailResp(proBufBody);
 			break;
-
-		default:
+		case NetHouseMsgType.CMD_GET_MEDICATIONS__RESP:// 用药记录列表
+			obj = HandleMedicationsResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_MEDICATIONSDETAIL_RESP:// 用药记录祥情
+			obj = HandleMedicationsDetailResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_MOOD_RESP:// 心情记录列表
+			obj = HandleMoodRecordResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_ADD_MOOD_RESP:// 添加心情响应
+			obj = HandleAddMoodResp(proBufBody);
+			break;
+		
+		case NetHouseMsgType.CMD_GET_COMMENT_RESP:// 评论列表 响应
+			obj = HandleCommentListResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_PUSH_COMMENT_RESP:// 评论 响应
+			obj = HandleCommentResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_COMMENTZAN_RESP:// 赞响应
+			obj = HandleCommentZanResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_COLLECT_NEWS_RESP:// 收藏响应
+			obj = HandleCollectResp(proBufBody);
 			break;
 		}
 
@@ -292,6 +331,25 @@ public class HandleNetReceiveMsg {
 	}
 
 	/*
+	 * 获取治疗记录 响应
+	 */
+	private static MedicationsResp HandleMedicationsResp(byte[] proBufBody) {
+
+		MedicationsResp Localresp = new MsgReceiveDef.MedicationsResp();
+		try {
+			CmdMsgPro.CMD_Get_Yongyao_RecordResp_PRO servResp = CMD_Get_Yongyao_RecordResp_PRO.parseFrom(proBufBody);
+			Localresp.info = servResp.getInfoList();
+			Localresp.ePageType = servResp.getEPageType();
+			Localresp.szTime = servResp.getSzTime();
+			Localresp.eResult = servResp.getEResult();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
 	 * 获取体检记录祥情 响应
 	 */
 	private static PhysicalDetailResp HandlePhysicalDetailResp(byte[] proBufBody) {
@@ -321,6 +379,151 @@ public class HandleNetReceiveMsg {
 			Localresp.eResult = servResp.getEResult();
 			Localresp.szContent = servResp.getSzContent();
 
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 获取用药记录祥情 响应
+	 */
+	private static MedicaltionsDetailResp HandleMedicationsDetailResp(byte[] proBufBody) {
+
+		MsgReceiveDef.MedicaltionsDetailResp Localresp = new MsgReceiveDef.MedicaltionsDetailResp();
+		try {
+			CmdMsgPro.CMD_Get_Yongyao_InfoResp_PRO servResp = CMD_Get_Yongyao_InfoResp_PRO.parseFrom(proBufBody);
+			Localresp.info = servResp.getInfo();
+			Localresp.eResult = servResp.getEResult();
+			Localresp.szContent = servResp.getSzContent();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 获取心情记录 响应
+	 */
+	private static MoodRecordResp HandleMoodRecordResp(byte[] proBufBody) {
+
+		MsgReceiveDef.MoodRecordResp Localresp = new MsgReceiveDef.MoodRecordResp();
+		try {
+			CmdMsgPro.CMD_Get_Mood_RecordResp_PRO servResp = CMD_Get_Mood_RecordResp_PRO.parseFrom(proBufBody);
+			Localresp.info = servResp.getInfoList();
+			Localresp.eResult = servResp.getEResult();
+			Localresp.iAverage = servResp.getIaverage();
+			Localresp.szTime = servResp.getSzTime();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 获取添加心情结果
+	 */
+	private static AddMoodResp HandleAddMoodResp(byte[] proBufBody) {
+
+		MsgReceiveDef.AddMoodResp Localresp = new MsgReceiveDef.AddMoodResp();
+		try {
+			CmdMsgPro.CMD_AddMoodResp_PRO servResp = CMD_AddMoodResp_PRO.parseFrom(proBufBody);
+			Localresp.iRecordIndex = servResp.getIRecordIndex();
+			Localresp.eResult = servResp.getEResult();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 阅读结果
+	 */
+	private static AddMoodResp HandleNewsDetailResp(byte[] proBufBody) {
+
+		MsgReceiveDef.AddMoodResp Localresp = new MsgReceiveDef.AddMoodResp();
+		try {
+			CmdMsgPro.CMD_AddMoodResp_PRO servResp = CMD_AddMoodResp_PRO.parseFrom(proBufBody);
+			Localresp.iRecordIndex = servResp.getIRecordIndex();
+			Localresp.eResult = servResp.getEResult();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 评论结果
+	 */
+	private static UserCommentResp HandleCommentResp(byte[] proBufBody) {
+
+		MsgReceiveDef.UserCommentResp Localresp = new MsgReceiveDef.UserCommentResp();
+		try {
+			CmdMsgPro.CMD_SetNewsCommentResp_PRO servResp = CMD_SetNewsCommentResp_PRO.parseFrom(proBufBody);
+			Localresp.eResult = servResp.getEResult();
+			Localresp.iCommentNum = servResp.getICommentNum();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 评论列表结果
+	 */
+	private static CommentListResp HandleCommentListResp(byte[] proBufBody) {
+
+		MsgReceiveDef.CommentListResp Localresp = new MsgReceiveDef.CommentListResp();
+		try {
+			CmdMsgPro.CMD_GetNewsCommentListResp_PRO servResp = CMD_GetNewsCommentListResp_PRO.parseFrom(proBufBody);
+			Localresp.eResult = servResp.getEResult();
+			Localresp.iNewsId = servResp.getInewsid();
+			Localresp.info = servResp.getInfoList();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 评论点赞结果
+	 */
+	private static CommentZanResp HandleCommentZanResp(byte[] proBufBody) {
+
+		MsgReceiveDef.CommentZanResp Localresp = new MsgReceiveDef.CommentZanResp();
+		try {
+			CmdMsgPro.CMD_SetNewsCommentSupportResp_PRO servResp = CMD_SetNewsCommentSupportResp_PRO
+					.parseFrom(proBufBody);
+
+			Localresp.eResult = servResp.getEResult();
+			Localresp.iCommentId = servResp.getIcommentid();
+			Localresp.iSupportNum = servResp.getISupportNum();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+	/*
+	 * 资讯收藏结果
+	 */
+	private static CollectNewsResp HandleCollectResp(byte[] proBufBody) {
+		
+		MsgReceiveDef.CollectNewsResp Localresp = new MsgReceiveDef.CollectNewsResp();
+		try {
+			CmdMsgPro.CMD_CollectionNewsResp_PRO servResp = CMD_CollectionNewsResp_PRO
+					.parseFrom(proBufBody);
+			
+			Localresp.eResult = servResp.getEResult();
+			Localresp.iNewsId=servResp.getInewsid();
+			Localresp.collectType=servResp.getType();
+			
 		} catch (InvalidProtocolBufferException e) {
 			e.printStackTrace();
 		}

@@ -3,32 +3,46 @@ package com.sltj.medical;
 import java.util.Calendar;
 import java.util.List;
 
+import com.db.chart.Tools;
+import com.db.chart.listener.OnEntryClickListener;
+import com.db.chart.model.LineSet;
+import com.db.chart.view.AxisController;
+import com.db.chart.view.LineChartView;
+import com.db.chart.view.animation.Animation;
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.dao.DbCore;
 import com.sltj.medical.dao.stepTable;
 import com.sltj.medical.dao.stepTableDao;
 import com.sltj.medical.dao.stepTableDao.Properties;
 import com.sltj.medical.util.MTools;
+import com.sltj.medical.util.ToastUtils;
 import com.sltj.medical.wedgit.CircleBar;
 
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
+/**
+ * 运动祥情页面
+ * 
+ */
 public class StepDetailActivity extends BaseActivity
-		implements OnCheckedChangeListener, OnClickListener {
+		implements OnCheckedChangeListener, OnClickListener, OnEntryClickListener {
 	private RadioGroup mRadioGroup;
 	private FrameLayout mFramLayout;
 	private View vStep, vSleep, vShare; // 切换时加载的三个布局
 	private LayoutInflater mInflayter;
 
-	private Button btnback;
+	private LinearLayout btnback;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +56,7 @@ public class StepDetailActivity extends BaseActivity
 		mInflayter = LayoutInflater.from(this);
 		mRadioGroup = (RadioGroup) findViewById(R.id.rg_step_detail);
 		mFramLayout = (FrameLayout) findViewById(R.id.fl);
-		btnback = (Button) findViewById(R.id.btn_stepdetail_back);
+		btnback = (LinearLayout) findViewById(R.id.ll_back);
 
 	}
 
@@ -113,49 +127,50 @@ public class StepDetailActivity extends BaseActivity
 	/**
 	 * 查看近一周步行拆线图
 	 */
-	private final static String[] mLabels = { "ANT", "GNU", "OWL", "APE", "COD", "YAK", "RAM" };
+	private final static String[] mLabels = { "周一", "周二", "周三", "周四", "周五", "周六", "周日" };
 	private final float[][] mValues = { { 0f, 2f, 1.4f, 4.f, 3.5f, 4.3f, 2f }, { 1.5f, 2.5f, 1.5f, 5f, 4f, 5f, 4.3f } };
-//	private LineSet dataset;
+	private LineSet dataset;
 
 	private void initWillianmChart() {
-//		vSleep = mInflayter.inflate(R.layout.stepandsleep, null);
-//		LineChartView willLineChartView = (LineChartView) vSleep.findViewById(R.id.will_linechart);
-//		dataset = new LineSet(mLabels, mValues[0]);
-//		// 直线颜色
-//		dataset.setColor(Color.parseColor("#58C674")).setDotsRadius(Tools.fromDpToPx(6))
-//				.setDotsColor(Color.parseColor("#FFE4E1")).setSmooth(true).setDotsStrokeColor(Color.WHITE)
-//				.setDotsStrokeThickness(2F);
-//		willLineChartView.addData(dataset);
-//		willLineChartView.setBorderSpacing(1)
-//				// x,y轴上文字显示的位置,默认是显示为outside;
-//				.setXLabels(AxisController.LabelPosition.OUTSIDE).setYLabels(AxisController.LabelPosition.NONE)
-//				// 是否显示x,y轴
-//				.setXAxis(false).setYAxis(false).setBorderSpacing(Tools.fromDpToPx(5));
-//		Animation anim = new Animation();
-//		anim.setAlpha(1000);
-//
-//		// 拆线图上小圆点的点击事件
-//		willLineChartView.setOnEntryClickListener(this);
-//		willLineChartView.show(anim);
-//		mFramLayout.addView(vSleep);
+		vSleep = mInflayter.inflate(R.layout.stepandsleep, null);
+		LineChartView willLineChartView = (LineChartView) vSleep.findViewById(R.id.will_linechart);
+		dataset = new LineSet(mLabels, mValues[0]);
+		// 直线颜色
+		dataset.setColor(Color.parseColor("#58C674")).setDotsRadius(Tools.fromDpToPx(6))
+				.setDotsColor(Color.parseColor("#FFE4E1")).setSmooth(true).setDotsStrokeColor(Color.WHITE)
+				.setDotsStrokeThickness(2F);
+		willLineChartView.addData(dataset);
+		willLineChartView.setBorderSpacing(1)
+				// x,y轴上文字显示的位置,默认是显示为outside;
+				.setXLabels(AxisController.LabelPosition.OUTSIDE).setYLabels(AxisController.LabelPosition.NONE)
+				// 是否显示x,y轴
+				.setXAxis(false).setYAxis(false).setBorderSpacing(Tools.fromDpToPx(5));
+		Animation anim = new Animation();
+		anim.setAlpha(1000);
+
+		// 拆线图上小圆点的点击事件
+		willLineChartView.setOnEntryClickListener(this);
+		willLineChartView.show(anim);
+		mFramLayout.addView(vSleep);
 
 	}
-
-//	@Override
-//	public void onClick(int setIndex, int entryIndex, Rect rect) {
-//		ToastUtils.show(this, setIndex + "--" + entryIndex + "--", 0);
-//	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_stepdetail_back:
+		case R.id.ll_back:
 			this.finish();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onClick(int setIndex, int entryIndex, Rect rect) {
+		ToastUtils.show(this, setIndex + "--" + entryIndex + "--", 0);
+
 	}
 
 }

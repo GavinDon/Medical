@@ -626,7 +626,10 @@ public class MTools {
 			return beforeTime;
 		}
 		String strNewTime = beforeTime.substring(0, beforeTime.lastIndexOf(":"));
-		return strNewTime;
+		//分割时间 只要 时分秒
+		String[] strNewTime2 = beforeTime.split(" ");
+	
+		return strNewTime2[1].substring(0,strNewTime2[1].lastIndexOf(":"));
 	}
 	
 	

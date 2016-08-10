@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:divider="@color/divideline"
-        android:dividerPadding="1px"
+        android:dividerHeight="1px"
         ptr:ptrDrawable="@drawable/loading" >
     </com.fiter.pulltorefresh.PullToRefreshListView>
 

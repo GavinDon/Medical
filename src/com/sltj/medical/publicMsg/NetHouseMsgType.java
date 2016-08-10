@@ -42,6 +42,9 @@ public class NetHouseMsgType {
 	public final static int CMD_COLLECT_NEWS_REQ = 10017; // 收藏资讯请求消息
 	public final static int CMD_COLLECT_NEWS_RESP = 10018; // 获收藏资讯响应消息
 
+	public final static int CMD_GET_COMMENTZAN_REQ = 10011; // 获取评论点赞请求消息
+	public final static int CMD_GET_COMMENTZAN_RESP = 10012; // 获取评论点赞响应消息
+	
 	public final static int CMD_GET_MYDOCTOR_REQ = 10021; // 获取我的医生列表请求消息
 	public final static int CMD_GET_MYDOCTOR_RESP = 10022; // 获取我的医生列表响应消息
 
@@ -64,7 +67,7 @@ public class NetHouseMsgType {
 	public final static int CMD_ADD_MOOD_RESP = 10040; // 添加心情响应消息
 
 	public final static int CMD_GET_MOOD_REQ = 10041; // 获取心情列表请求消息
-	public final static int CMD_GET_MOOD_RESQ = 10042; // 获取心情列表响应消息
+	public final static int CMD_GET_MOOD_RESP = 10042; // 获取心情列表响应消息
 
 	public final static int CMD_GET_PHYSICALDETAIL_REQ = 10043; // 获取体检详细信息请求消息
 	public final static int CMD_GET_PHYSICALDETAIL_RESP = 10044; // 获取体检详细信息请求消息

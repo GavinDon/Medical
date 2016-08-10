@@ -43,15 +43,13 @@
             android:textSize="16sp"
             android:visibility="invisible" />
 
-        <TextView
+        <ImageView
             android:id="@+id/ada_iv_mine_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="20dp"
-            android:text=">"
-            android:textColor="#25d1c3"
-            android:textSize="26sp"
+            android:background="@drawable/arrow_gray_r"
           />
     </LinearLayout>
 

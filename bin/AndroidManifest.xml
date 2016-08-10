@@ -53,6 +53,10 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 允许使用PowerManager的WakeLocks保持进程在休眠时从屏幕消失 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 系统级对话框 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -162,6 +166,34 @@
         <activity
             android:name=".TreatDetailActivity"
             android:label="@string/title_activity_treat_detail" >
+        </activity>
+        <activity
+            android:name=".MedicationsActivity"
+            android:label="@string/title_activity_medications" >
+        </activity>
+        <activity
+            android:name=".MoodRecordActivity"
+            android:label="@string/title_activity_mood_record" >
+        </activity>
+        <activity
+            android:name=".AddMoodActivity"
+            android:label="@string/title_activity_and_mood" >
+        </activity>
+        <activity
+            android:name=".NewsDetailActivity"
+            android:label="@string/title_activity_news_detail" >
+        </activity>
+        <activity
+            android:name=".CommentListActivity"
+            android:label="@string/title_activity_comment_list" >
+        </activity>
+        <activity
+            android:name=".DrawerLayoutActivity"
+            android:label="@string/title_activity_drawer_layout" >
+        </activity>
+        <activity
+            android:name=".MemberPrivateDoctorActivity"
+            android:label="@string/title_activity_member_private_doctor" >
         </activity>
     </application>
 
