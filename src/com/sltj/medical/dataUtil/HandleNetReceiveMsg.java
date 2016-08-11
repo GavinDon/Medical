@@ -8,7 +8,9 @@ import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_LoginResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_AddMoodResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_CollectionNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetDoctorInfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetHomeNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetMyDoctorListResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsCommentListResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Mood_RecordResp_PRO;
@@ -34,6 +36,8 @@ import com.sltj.medical.publicMsg.MsgReceiveDef.AuthcodeResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.CollectNewsResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.CommentListResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.CommentZanResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.DoctorInfoResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.DoctorListResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.HomeNewsResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.MedicaltionsDetailResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.MedicationsResp;
@@ -127,7 +131,7 @@ public class HandleNetReceiveMsg {
 		case NetHouseMsgType.CMD_ADD_MOOD_RESP:// 添加心情响应
 			obj = HandleAddMoodResp(proBufBody);
 			break;
-		
+
 		case NetHouseMsgType.CMD_GET_COMMENT_RESP:// 评论列表 响应
 			obj = HandleCommentListResp(proBufBody);
 			break;
@@ -139,6 +143,12 @@ public class HandleNetReceiveMsg {
 			break;
 		case NetHouseMsgType.CMD_COLLECT_NEWS_RESP:// 收藏响应
 			obj = HandleCollectResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_DOCTOR_RESP:// 医生列表
+			obj = HandleDoctorListResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_DOCTORDETAIL_RESP:// 医生祥情
+			obj = HandleDoctorDetailResp(proBufBody);
 			break;
 		}
 
@@ -510,20 +520,57 @@ public class HandleNetReceiveMsg {
 		}
 		return Localresp;
 	}
+
 	/*
 	 * 资讯收藏结果
 	 */
 	private static CollectNewsResp HandleCollectResp(byte[] proBufBody) {
-		
+
 		MsgReceiveDef.CollectNewsResp Localresp = new MsgReceiveDef.CollectNewsResp();
 		try {
-			CmdMsgPro.CMD_CollectionNewsResp_PRO servResp = CMD_CollectionNewsResp_PRO
-					.parseFrom(proBufBody);
-			
+			CmdMsgPro.CMD_CollectionNewsResp_PRO servResp = CMD_CollectionNewsResp_PRO.parseFrom(proBufBody);
+
 			Localresp.eResult = servResp.getEResult();
-			Localresp.iNewsId=servResp.getInewsid();
-			Localresp.collectType=servResp.getType();
-			
+			Localresp.iNewsId = servResp.getInewsid();
+			Localresp.collectType = servResp.getType();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 医生列表响应
+	 */
+	private static DoctorListResp HandleDoctorListResp(byte[] proBufBody) {
+
+		MsgReceiveDef.DoctorListResp Localresp = new MsgReceiveDef.DoctorListResp();
+		try {
+			CmdMsgPro.CMD_GetMyDoctorListResp_PRO servResp = CMD_GetMyDoctorListResp_PRO.parseFrom(proBufBody);
+
+			Localresp.eResult = servResp.getEResult();
+			Localresp.info = servResp.getInfoList();
+			Localresp.iPage = servResp.getIPage();
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+
+	/*
+	 * 医生祥情列表响应
+	 */
+	private static DoctorInfoResp HandleDoctorDetailResp(byte[] proBufBody) {
+
+		MsgReceiveDef.DoctorInfoResp Localresp = new MsgReceiveDef.DoctorInfoResp();
+		try {
+			CmdMsgPro.CMD_GetDoctorInfoResp_PRO servResp = CMD_GetDoctorInfoResp_PRO.parseFrom(proBufBody);
+
+			Localresp.eResult = servResp.getEResult();
+			Localresp.doctorinfo = servResp.getDoctorinfo();
+
 		} catch (InvalidProtocolBufferException e) {
 			e.printStackTrace();
 		}

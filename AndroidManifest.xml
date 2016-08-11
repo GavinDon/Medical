@@ -195,6 +195,14 @@
             android:name=".MemberPrivateDoctorActivity"
             android:label="@string/title_activity_member_private_doctor" >
         </activity>
+        <activity
+            android:name=".DoctorDetailActivity"
+            android:label="@string/title_activity_doctor_detail" >
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat" >
+        </activity>
     </application>
 
 </manifest>

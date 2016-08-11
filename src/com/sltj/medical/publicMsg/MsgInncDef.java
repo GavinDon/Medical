@@ -207,6 +207,35 @@ public final class MsgInncDef {
 		public int iGrade; // 记录评分
 		public String szContent;// 消息内容
 	}
+	
+	/**
+	 * 获取我的医生列表请求消息
+	 *
+	 */
+	public static class IMyDoctorListReq {
+		public int iuserid; //
+		public int iPage; // 第几页
+	}
+	/**
+	 *获取医生详细信息请求
+	 *
+	 */
+	public static class IDoctorInfoReq {
+		public int iuserid; //
+		public int iDoctorId; // 第几页
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	// -------------------------------------------------------------------------------------//
 	/*

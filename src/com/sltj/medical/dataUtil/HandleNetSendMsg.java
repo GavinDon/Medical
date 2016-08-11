@@ -7,7 +7,9 @@ import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_LoginReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_AddMoodReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_CollectionNewsReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetDoctorInfoReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetHomeNewsReq_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetMyDoctorListReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsCommentListReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsReq_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Mood_RecordReq_PRO;
@@ -591,6 +593,60 @@ public class HandleNetSendMsg {
 		// 拼接消息头和消息体
 		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
 
+		return msgByteArray;
+	}
+	/**
+	 * 我的医生列表
+	 */
+	public static byte[] HandleMyDoctorListPro(MsgInncDef.IMyDoctorListReq Param, int sequence) {
+
+		// 组织序列化消息
+		CmdMsgPro.CMD_GetMyDoctorListReq_PRO.Builder builder = CmdMsgPro.CMD_GetMyDoctorListReq_PRO.newBuilder();
+
+		builder.setIuserid(Param.iuserid);
+		builder.setIPage(Param.iPage);
+		// 建立消息内容
+		CMD_GetMyDoctorListReq_PRO pro = builder.build();
+		// 消息长度
+		int msgLength = pro.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = pro.toByteArray();
+
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_GET_DOCTOR_REQ, msgLength, msgLength, sequence, 0);
+
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+
+		return msgByteArray;
+	}
+	/**
+	 * 我的医生祥细信息
+	 */
+	public static byte[] HandleDoctorInfoPro(MsgInncDef.IDoctorInfoReq Param, int sequence) {
+		
+		// 组织序列化消息
+		CmdMsgPro.CMD_GetDoctorInfoReq_PRO.Builder builder = CmdMsgPro.CMD_GetDoctorInfoReq_PRO.newBuilder();
+		
+		builder.setIuserid(Param.iuserid);
+		builder.setIdoctorid(Param.iDoctorId);
+		// 建立消息内容
+		CMD_GetDoctorInfoReq_PRO pro = builder.build();
+		// 消息长度
+		int msgLength = pro.getSerializedSize();
+		// 将消息序列化
+		byte[] msgProBody = pro.toByteArray();
+		
+		// 构建消息头
+		HandleNetHeadMsg headMsg = new HandleNetHeadMsg();
+		// 复制时此处不要忘记修改了=======
+		byte[] msgByteHead = headMsg.buildHeadMsg(NetHouseMsgType.CMD_DOCTORDETAIL_REQ, msgLength, msgLength, sequence, 0);
+		
+		// 拼接消息头和消息体
+		final byte[] msgByteArray = MTools.copyByteArray(msgByteHead, msgProBody);
+		
 		return msgByteArray;
 	}
 }

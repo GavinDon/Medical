@@ -7,9 +7,11 @@ import com.sltj.medical.dataUtil.protobuf.EnumPro.eMSG_OPER_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eOPERRESULT_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_CommentInfo_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_DoctorInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Mood_RecoderInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_NewsInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_ServerInfo_PRO;
+import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_SimpleInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Tijian_RecoderInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Yongyao_RecoderInfo_PRO;
 import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_Zhiliao_RecoderInfo_PRO;
@@ -208,6 +210,27 @@ public class MsgReceiveDef {
 		public int iRecordIndex; // 添加成功返回心情ID
 	}
 
+	/**
+	 * 获取我的医生列表响应
+	 */
+	public static class DoctorListResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public int iPage; // 第几页
+		public List<Net_SimpleInfo_PRO> info;
+	}
+
+	/**
+	 * 获取医生详细信息响应
+	 */
+	public static class DoctorInfoResp {
+		public eOPERRESULT_PRO eResult;// 操作结果
+		public Net_DoctorInfo_PRO doctorinfo;
+
+	}
+
+	
+	
+	
 	// ============================通知类消息================================
 
 }

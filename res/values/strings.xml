@@ -23,5 +23,7 @@
     <string name="title_activity_comment_list">CommentListActivity</string>
     <string name="title_activity_drawer_layout">DrawerLayoutActivity</string>
     <string name="title_activity_member_private_doctor">MemberPrivateDoctorActivity</string>
+    <string name="title_activity_doctor_detail">DoctorDetailActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>

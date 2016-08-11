@@ -8,11 +8,8 @@ import com.sltj.medical.base.MyApplication;
 import com.sltj.medical.base.MyBaseAdapter;
 import com.sltj.medical.base.ViewHolder;
 import com.sltj.medical.dataUtil.HandleNetSendMsg;
-import com.sltj.medical.dataUtil.protobuf.PublicmsgPro.Net_CommentInfo_PRO;
 import com.sltj.medical.publicMsg.MsgInncDef;
 import com.sltj.medical.publicMsg.MsgInncDef.ICommenZanReq;
-import com.sltj.medical.publicMsg.MsgInncDef.IReadNewsReq;
-import com.sltj.medical.publicMsg.MsgReceiveDef.CommentZanResp;
 import com.sltj.medical.socketutil.HouseSocketConn;
 import com.sltj.medical.util.LogUtils;
 
@@ -24,12 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AdapterCommentList extends MyBaseAdapter<Map<String, Object>> {
-	private Context mContect;
+	private Context mContext;
 	private int seqCommentZan;
 
 	public AdapterCommentList(Context context, List<Map<String, Object>> lst) {
 		super(context, lst);
-		this.mContect = context;
+		this.mContext = context;
 	}
 
 	@Override

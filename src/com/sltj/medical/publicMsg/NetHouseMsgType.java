@@ -49,7 +49,7 @@ public class NetHouseMsgType {
 	public final static int CMD_GET_MYDOCTOR_RESP = 10022; // 获取我的医生列表响应消息
 
 	public final static int CMD_GET_DOCTOR_REQ = 10023; // 获取医生列表请求消息
-	public final static int CMD_GET_DOCTOR_RESP = 10024; // 获取医生列表请求消息
+	public final static int CMD_GET_DOCTOR_RESP = 10024; // 获取医生列表响应消息
 
 	public final static int CMD_DOCTORDETAIL_REQ = 10025; // 获取医生详细信息请求消息
 	public final static int CMD_DOCTORDETAIL_RESP = 10026; // 获取医生详细信息响应消息
