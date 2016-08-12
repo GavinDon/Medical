@@ -1,22 +1,33 @@
 package com.sltj.medical;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.db.chart.Tools;
 import com.db.chart.listener.OnEntryClickListener;
 import com.db.chart.model.LineSet;
+import com.db.chart.model.Point;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
+import com.db.chart.view.Tooltip;
 import com.db.chart.view.animation.Animation;
+import com.sltj.medical.adapter.StepDetailGridView;
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.dao.DbCore;
 import com.sltj.medical.dao.stepTable;
 import com.sltj.medical.dao.stepTableDao;
 import com.sltj.medical.dao.stepTableDao.Properties;
+import com.sltj.medical.util.LogUtils;
 import com.sltj.medical.util.MTools;
 import com.sltj.medical.util.ToastUtils;
 import com.sltj.medical.wedgit.CircleBar;
+import com.sltj.medical.wedgit.LineGridView;
 
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -128,23 +139,66 @@ public class StepDetailActivity extends BaseActivity
 	 * 查看近一周步行拆线图
 	 */
 	private final static String[] mLabels = { "周一", "周二", "周三", "周四", "周五", "周六", "周日" };
-	private final float[][] mValues = { { 0f, 2f, 1.4f, 4.f, 3.5f, 4.3f, 2f }, { 1.5f, 2.5f, 1.5f, 5f, 4f, 5f, 4.3f } };
+	private final float[] mValues = { 0f, 0f, 0f, 0f, 0f, 0f, 0f };
 	private LineSet dataset;
+	String[] titleValue = { "总步数", "总距离", "活动时间", "活动消耗" };// 显示某一天的数据
+	String[] Value = {};
 
 	private void initWillianmChart() {
+
+		gv = (LineGridView) findViewById(R.id.stepdetail_gv);
+		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
+		List<stepTable> talbe = dao.loadAll();
+//
+//		if (!talbe.isEmpty()) {
+//			for (int i = 0; i < talbe.size(); i++) {
+//				int date = MTools.getWeekDay(talbe.get(i).getDate(), "yyyy-MM-dd");
+//				switch (date) {
+//				case 1:
+//					mValues[6] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				case 2:
+//					mValues[0] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				case 3:
+//					mValues[1] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				case 4:
+//					mValues[2] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				case 5:
+//					mValues[3] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				case 6:
+//					mValues[4] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				case 7:
+//					mValues[5] = Float.parseFloat(talbe.get(i).getStep());
+//					break;
+//				}
+
+//			}
+//		}
 		vSleep = mInflayter.inflate(R.layout.stepandsleep, null);
 		LineChartView willLineChartView = (LineChartView) vSleep.findViewById(R.id.will_linechart);
-		dataset = new LineSet(mLabels, mValues[0]);
-		// 直线颜色
-		dataset.setColor(Color.parseColor("#58C674")).setDotsRadius(Tools.fromDpToPx(6))
-				.setDotsColor(Color.parseColor("#FFE4E1")).setSmooth(true).setDotsStrokeColor(Color.WHITE)
+		dataset = new LineSet();
+		
+		for(int i=0;i<talbe.size();i++){
+			float step=Float.parseFloat(talbe.get(i).getStep());
+			String week=talbe.get(i).getWeek();
+			 dataset.addPoint(week, step);
+		}
+		
+		dataset.setColor(Color.parseColor("#ff0000")).setDotsRadius(Tools.fromDpToPx(6))
+				.setDotsColor(Color.parseColor("#FFE4E1")).setSmooth(false).setDotsStrokeColor(Color.WHITE)
 				.setDotsStrokeThickness(2F);
 		willLineChartView.addData(dataset);
-		willLineChartView.setBorderSpacing(1)
+		willLineChartView.setBorderSpacing(1).setTopSpacing(10).setStep(10000)
 				// x,y轴上文字显示的位置,默认是显示为outside;
 				.setXLabels(AxisController.LabelPosition.OUTSIDE).setYLabels(AxisController.LabelPosition.NONE)
 				// 是否显示x,y轴
 				.setXAxis(false).setYAxis(false).setBorderSpacing(Tools.fromDpToPx(5));
+		Tooltip t = new Tooltip(this);
 		Animation anim = new Animation();
 		anim.setAlpha(1000);
 
@@ -170,7 +224,27 @@ public class StepDetailActivity extends BaseActivity
 	@Override
 	public void onClick(int setIndex, int entryIndex, Rect rect) {
 		ToastUtils.show(this, setIndex + "--" + entryIndex + "--", 0);
+		// 0是周一
+		
+
+		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
+		List<stepTable> tableLst = dao.queryBuilder().where(Properties.Date.eq("")).list();
+		if (!tableLst.isEmpty()) {
+			String step = tableLst.get(0).getStep();
+			String cal = tableLst.get(0).getCal();
+			String kilometer = tableLst.get(0).getKilometer();
+			Value = new String[] { step, cal, kilometer, "15" };
+		}
+
+		for (int i = 0; i < titleValue.length; i++) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("title", titleValue[i]);
+			map.put("value", Value[i]);
+		}
 
 	}
+
+	private LineGridView gv;
+	private List<Map<String, String>> lst = new ArrayList<Map<String, String>>();
 
 }

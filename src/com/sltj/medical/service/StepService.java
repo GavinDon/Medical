@@ -13,6 +13,7 @@ import com.sltj.medical.dao.DbCore;
 import com.sltj.medical.dao.stepTable;
 import com.sltj.medical.dao.stepTableDao;
 import com.sltj.medical.dao.stepTableDao.Properties;
+import com.sltj.medical.util.MTools;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -36,6 +37,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import de.greenrobot.dao.query.QueryBuilder;
 
 public class StepService extends Service implements SensorEventListener {
 	// 默认为30秒进行一次存储
@@ -309,12 +311,18 @@ public class StepService extends Service implements SensorEventListener {
 	private void save() {
 		int tempStep = StepDcretor.CURRENT_SETP;
 		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
+		List<stepTable>all= dao.loadAll();
+		if(all.size()>7){
+			QueryBuilder<stepTable> oneTable=dao.queryBuilder().orderAsc(Properties.Id).limit(1);
+			dao.delete(oneTable.list().get(0));
+		}
 		// 查询当日的数据
 		List<stepTable> stepList = dao.queryBuilder().where(Properties.Date.eq(CURRENTDATE)).list();
 		stepTable item;
 		if (stepList.size() == 0 || stepList.isEmpty()) {
 			item = new stepTable();
 			item.setDate(CURRENTDATE);
+			item.setWeek(MTools.getWeekDay(CURRENTDATE,"yyyy-MM-dd"));
 			item.setStep(tempStep + "");
 			countDistance();
 			calories = weight * distance * 0.001;
@@ -323,7 +331,6 @@ public class StepService extends Service implements SensorEventListener {
 			dao.insert(item);
 		} else if (stepList.size() == 1) {
 			item = stepList.get(0);
-			item.setDate(CURRENTDATE);
 			item.setStep(tempStep + "");
 			countDistance();
 			calories = weight * distance * 0.001;

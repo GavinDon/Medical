@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,20 +31,20 @@ import android.text.style.ForegroundColorSpan;
  */
 public class MTools {
 
-	
 	/**
 	 * 根据网络返回的状态判断操作结果信息--主要用于判断来自auth服务器的信息
+	 * 
 	 * @param result_Pro
 	 * @return
 	 */
-	public static String judgeNetResult_Auth(eOPERRESULT_PRO result_Pro){
+	public static String judgeNetResult_Auth(eOPERRESULT_PRO result_Pro) {
 		String strResult = "";
-		
-		if(result_Pro == null || "".equals(result_Pro)){
+
+		if (result_Pro == null || "".equals(result_Pro)) {
 			strResult = "未知原因";
 			return strResult;
 		}
-		
+
 		switch (result_Pro) {
 		case E_OPER_SUCCESS_PRO:
 			strResult = "成功";
@@ -225,33 +226,32 @@ public class MTools {
 		case E_OPER_DB_USERINFO_REJECT_PRO:
 			strResult = "用户已设置查看权限";
 			break;
-		
+
 		default:
 			strResult = "未知原因";
 			break;
 		}
-		
+
 		return strResult;
 	}
-	
-	
 
-	
 	/**
 	 * 根据服务类型的code获得服务类型
+	 * 
 	 * @param appHomeDataList
 	 * @param serviceCode
 	 * @return
 	 */
-	public static List<Map<String, String>> getServiceType(List<Map<String, String>> appHomeDataList,String serviceCode){
-		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
-		
-		if(serviceCode == null || appHomeDataList == null){
+	public static List<Map<String, String>> getServiceType(List<Map<String, String>> appHomeDataList,
+			String serviceCode) {
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+
+		if (serviceCode == null || appHomeDataList == null) {
 			return result;
 		}
-		
-		String[] codeArray = serviceCode.split(","); 
-		
+
+		String[] codeArray = serviceCode.split(",");
+
 		for (int i = 0; i < codeArray.length; i++) {
 			Map<String, String> map = new HashMap<String, String>();
 			String code = codeArray[i];
@@ -266,18 +266,13 @@ public class MTools {
 				}
 			}
 		}
-		
+
 		return result;
 	}
-	
-	
-	
-	
-	
+
 	/**
-	 * 核心--勿动
-	 * 将char类型数据转为byte数组，只取数组的低8位，作为一个长度为1的数组返回
-	 * 此方法用于组建连接网络的消息头
+	 * 核心--勿动 将char类型数据转为byte数组，只取数组的低8位，作为一个长度为1的数组返回 此方法用于组建连接网络的消息头
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -287,14 +282,10 @@ public class MTools {
 		b[0] = (byte) (c & 0xFF);
 		return b;
 	}
-	
-	
-	
+
 	/**
-	 * 核心--勿动
-	 * 将int数值转换为占四个字节的byte数组，本方法适用于(低位在前，高位在后)的顺序。
-	 *  此方法用于组建连接网络的消息头
-	 *  
+	 * 核心--勿动 将int数值转换为占四个字节的byte数组，本方法适用于(低位在前，高位在后)的顺序。 此方法用于组建连接网络的消息头
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -306,9 +297,7 @@ public class MTools {
 		src[3] = (byte) ((value >> 24) & 0xFF);
 		return src;
 	}
-	
-	
-	
+
 	/**
 	 * 将两个数组合并为一个数组，并返回
 	 * 
@@ -322,51 +311,44 @@ public class MTools {
 		System.arraycopy(second, 0, newByte, fist.length, second.length);
 		return newByte;
 	}
-	
-	
-	
+
 	/**
-	 * 核心--勿动
-	 * 将byte数组转为int型数据
+	 * 核心--勿动 将byte数组转为int型数据
+	 * 
 	 * @param res
 	 * @return
 	 */
 	public static int byteToInt(byte[] res) {
-		int targets = (res[0] & 0xff) | ((res[1] << 8) & 0xff00)
-				| ((res[2] << 24) >>> 8) | (res[3] << 24);
+		int targets = (res[0] & 0xff) | ((res[1] << 8) & 0xff00) | ((res[2] << 24) >>> 8) | (res[3] << 24);
 		return targets;
 	}
-	
-	
-	
-	
+
 	/**
-	 * 核心--勿动
-	 * 获取网络接收消息的消息头
+	 * 核心--勿动 获取网络接收消息的消息头
+	 * 
 	 * @param proBuf
 	 * @return
 	 */
-	public static byte[] getNetMsgHead(byte[] proBuf){
+	public static byte[] getNetMsgHead(byte[] proBuf) {
 		byte[] headMsgArray = Arrays.copyOfRange(proBuf, 0, 23);
 		return headMsgArray;
 	}
-	
-	
-	
-	
+
 	/**
-	 * 核心--勿动
-	 * 获取网络接收数据的消息体
+	 * 核心--勿动 获取网络接收数据的消息体
+	 * 
 	 * @param proBuf
 	 * @return
 	 */
 	@SuppressLint("NewApi")
-	public static byte[] getNetMsgBody(byte[] proBuf){
+	public static byte[] getNetMsgBody(byte[] proBuf) {
 		byte[] msgBodyArray = Arrays.copyOfRange(proBuf, 23, proBuf.length);
 		return msgBodyArray;
 	}
+
 	/**
 	 * 判断字符串是否为空
+	 * 
 	 * @param data
 	 * @return
 	 */
@@ -376,9 +358,9 @@ public class MTools {
 		return false;
 	}
 
-	
 	/**
 	 * 判断list集合是否为空
+	 * 
 	 * @param list
 	 * @return
 	 */
@@ -387,11 +369,10 @@ public class MTools {
 			return true;
 		return false;
 	}
-	
-	
-	
+
 	/**
 	 * 将字符串型数字转换为int型 -- 此处会捕获异常，不至于导致程序崩溃
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -408,39 +389,33 @@ public class MTools {
 			return 0;
 		}
 	}
-	
-	
-	
+
 	/**
 	 * 保留两位小数
+	 * 
 	 * @param d
 	 * @return
 	 */
-	public static String getPoint2Float(double d)
-	{
-		DecimalFormat decimalFormat =new DecimalFormat("0.00");
+	public static String getPoint2Float(double d) {
+		DecimalFormat decimalFormat = new DecimalFormat("0.00");
 		return decimalFormat.format(d);
 	}
-	
-	
-	
+
 	/**
 	 * 保留两位小数
+	 * 
 	 * @param str
 	 * @return
 	 */
-	public static String getString2Float(String str)
-	{
-		if(MTools.isStringEmpty(str)){
+	public static String getString2Float(String str) {
+		if (MTools.isStringEmpty(str)) {
 			return "0.00";
 		}
 		Double d = Double.valueOf(str);
-		DecimalFormat decimalFormat =new DecimalFormat("0.00");
+		DecimalFormat decimalFormat = new DecimalFormat("0.00");
 		return decimalFormat.format(d);
 	}
-	
-	
-	
+
 	/**
 	 * 调此方法输入所要转换的时间输入例如（"2014-06-14"）返回时间戳
 	 * 
@@ -462,9 +437,7 @@ public class MTools {
 
 		return times;
 	}
-	
-	
-	
+
 	/**
 	 * 调此方法输入所要转换的时间输入例如（"2014-06-14 12:12"）返回时间戳
 	 * 
@@ -472,8 +445,7 @@ public class MTools {
 	 * @return
 	 */
 	public static Long datetimeToTimeMillis(String time) {
-		SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
-				Locale.CHINA);
+		SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 		Date date;
 		Long times = null;
 		try {
@@ -487,53 +459,53 @@ public class MTools {
 
 		return times;
 	}
-	
-	
-	
+
 	/**
 	 * 判断分钟是否小于10
+	 * 
 	 * @param minute
 	 * @return
 	 */
-	public static String judgeMinute(int minute){
+	public static String judgeMinute(int minute) {
 		return minute < 10 ? "0" + minute : "" + minute;
 	}
-	
+
 	/**
 	 * 判断小时是否小于10
+	 * 
 	 * @param hourOfDay
 	 * @return
 	 */
-	public static String judgeHourOfDay(int hourOfDay){
-		return hourOfDay < 10 ? "0" + hourOfDay : "" + hourOfDay; 
+	public static String judgeHourOfDay(int hourOfDay) {
+		return hourOfDay < 10 ? "0" + hourOfDay : "" + hourOfDay;
 	}
-	
-	
+
 	/**
 	 * 判断月是否小于10
+	 * 
 	 * @param month
 	 * @return
 	 */
-	public static String judgeMonth(int month){
+	public static String judgeMonth(int month) {
 		return month < 10 ? "0" + month : "" + month;
 	}
-	
-	
+
 	/**
 	 * 判断日是否小于10
+	 * 
 	 * @param dayOfMonth
 	 * @return
 	 */
-	public static String judgeDayOfMonth(int dayOfMonth){
+	public static String judgeDayOfMonth(int dayOfMonth) {
 		return dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth;
 	}
-	
-	
-	
+
 	/**
 	 * 格式化时间
-	 * @param time  Long time
-	 * @return  HH:mm
+	 * 
+	 * @param time
+	 *            Long time
+	 * @return HH:mm
 	 */
 	public static String getTimeHHMM(Long time) {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -541,11 +513,12 @@ public class MTools {
 		return timeFormat.format(data);
 	}
 
-	
 	/**
 	 * 格式化时间
-	 * @param time  Long time
-	 * @return  MM-dd
+	 * 
+	 * @param time
+	 *            Long time
+	 * @return MM-dd
 	 */
 	public static String getTimeMMDD(Long time) {
 		SimpleDateFormat timeFormat = new SimpleDateFormat("MM-dd");
@@ -553,11 +526,12 @@ public class MTools {
 		return timeFormat.format(data);
 	}
 
-	
 	/**
 	 * 格式化时间
-	 * @param time  Long time
-	 * @return  yyyy-MM-dd HH:mm
+	 * 
+	 * @param time
+	 *            Long time
+	 * @return yyyy-MM-dd HH:mm
 	 */
 	public static String getTimeYMDHHMM(Long time) {
 		Date date = new Date(time);
@@ -565,36 +539,33 @@ public class MTools {
 		return format.format(date);
 	}
 
-	
 	/**
 	 * 格式化时间
-	 * @param time  Long time
-	 * @return  yyyy-MM-dd
+	 * 
+	 * @param time
+	 *            Long time
+	 * @return yyyy-MM-dd
 	 */
 	public static String getTimeYMDHMS(Long time) {
 		Date date = new Date(time);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(date);
 	}
-	
-	
-	
+
 	/**
-	 * 将字符串中的"'"替换为"''"--一个单引号替换为两个单引号
-	 * 用于数据库中的操作
+	 * 将字符串中的"'"替换为"''"--一个单引号替换为两个单引号 用于数据库中的操作
+	 * 
 	 * @param str
 	 * @return
 	 */
-	public static String replaceQuotes(String str){
-		if(isStringEmpty(str)){
+	public static String replaceQuotes(String str) {
+		if (isStringEmpty(str)) {
 			return "";
 		}
 		String strNew = str.replace("'", "''");
 		return strNew;
 	}
-	
-	
-	
+
 	/**
 	 * 对手机号码进行隐藏处理
 	 * 
@@ -609,31 +580,29 @@ public class MTools {
 		String str = phone.replace(" ", "");
 		return str.substring(0, 3) + "****" + str.substring(7, str.length());
 	}
-	
-	
-	
+
 	/**
-	 * 将beforeTime中的秒去掉，只留下  年-月-日 时:分
-	 * @param beforeTime  2015-12-05 15:20:00
-	 * @return  2015-12-05 15:20
+	 * 将beforeTime中的秒去掉，只留下 年-月-日 时:分
+	 * 
+	 * @param beforeTime
+	 *            2015-12-05 15:20:00
+	 * @return 2015-12-05 15:20
 	 */
-	public static String subTimeToMinute(String beforeTime){
-		if(isStringEmpty(beforeTime)){
+	public static String subTimeToMinute(String beforeTime) {
+		if (isStringEmpty(beforeTime)) {
 			return "";
 		}
 		int l = beforeTime.length();
-		if(beforeTime.length() < 17){
+		if (beforeTime.length() < 17) {
 			return beforeTime;
 		}
 		String strNewTime = beforeTime.substring(0, beforeTime.lastIndexOf(":"));
-		//分割时间 只要 时分秒
+		// 分割时间 只要 时分秒
 		String[] strNewTime2 = beforeTime.split(" ");
-	
-		return strNewTime2[1].substring(0,strNewTime2[1].lastIndexOf(":"));
+
+		return strNewTime2[1].substring(0, strNewTime2[1].lastIndexOf(":"));
 	}
-	
-	
-	
+
 	/**
 	 * 将String类型的星级数量转换为float类型
 	 * 
@@ -653,11 +622,10 @@ public class MTools {
 		String strNewStarLever = iHigh + "." + iLow;
 
 		LogUtils.i(strNewStarLever);
-		
+
 		return Float.parseFloat(strNewStarLever);
 	}
-	
-	
+
 	/**
 	 * 将int类型的星级数量转换为float类型
 	 * 
@@ -665,63 +633,63 @@ public class MTools {
 	 * @return
 	 */
 	public static float processRatingLevel(int iStarLevel) {
-		if (MTools.isStringEmpty(iStarLevel+"")) {
+		if (MTools.isStringEmpty(iStarLevel + "")) {
 			return 0;
 		}
-		
+
 		int iHigh = iStarLevel / 10;
 		int iLow = iStarLevel % 10;
-		
+
 		String strNewStarLever = iHigh + "." + iLow;
-		
+
 		LogUtils.i(strNewStarLever);
-		
+
 		return Float.parseFloat(strNewStarLever);
 	}
-	
+
 	/**
-     * 关键字高亮显示
-     * 
-     * @param target  需要高亮的关键字
-     * @param text       需要显示的文字
-     * @return spannable 处理完后的结果，记得不要toString()，否则没有效果
-     */
-    public static SpannableStringBuilder highlight(String text, String target) {
-        SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-        CharacterStyle span = null;
- 
-        Pattern p = Pattern.compile(target);
-        Matcher m = p.matcher(text);
-        while (m.find()) {
-            span = new ForegroundColorSpan(Color.RED);// 需要重复！
-            spannable.setSpan(span, m.start(), m.end(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return spannable;
-    }
-    
-    
-    /**
-     * 是否存在SD卡
-     * @return
-     */
-    public static boolean isSDCardExists() {
-		return Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
+	 * 关键字高亮显示
+	 * 
+	 * @param target
+	 *            需要高亮的关键字
+	 * @param text
+	 *            需要显示的文字
+	 * @return spannable 处理完后的结果，记得不要toString()，否则没有效果
+	 */
+	public static SpannableStringBuilder highlight(String text, String target) {
+		SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+		CharacterStyle span = null;
+
+		Pattern p = Pattern.compile(target);
+		Matcher m = p.matcher(text);
+		while (m.find()) {
+			span = new ForegroundColorSpan(Color.RED);// 需要重复！
+			spannable.setSpan(span, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
+		return spannable;
 	}
-	
-	
-    
-    /**
-	 * SD卡根目录
+
+	/**
+	 * 是否存在SD卡
+	 * 
 	 * @return
 	 */
-	public static String getSDPath(){
-		if(!isSDCardExists()){
+	public static boolean isSDCardExists() {
+		return Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+	}
+
+	/**
+	 * SD卡根目录
+	 * 
+	 * @return
+	 */
+	public static String getSDPath() {
+		if (!isSDCardExists()) {
 			return null;
 		}
-		return  Environment.getExternalStorageDirectory().getAbsolutePath();
+		return Environment.getExternalStorageDirectory().getAbsolutePath();
 	}
+
 	/**
 	 * 获取时间
 	 * 
@@ -735,5 +703,54 @@ public class MTools {
 		return time;
 
 	}
-	
+
+	/**
+	 * 根据日期算出星期几
+	 */
+	public static String getWeekDay(String date, String pattern) {
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		String strDay="";
+		int	day=0;
+		try {
+			Date d = format.parse(date);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(d);
+			day = cal.get(Calendar.DAY_OF_WEEK);
+			switch (day) {
+			case 1:
+				strDay="周日";
+				break ;
+
+			case 2:
+				strDay="周一";
+				break;
+			case 3:
+				strDay="周二";
+				break;
+			case 4:
+				strDay=("周三");
+
+				break;
+			case 5:
+				strDay="周四";
+
+				break;
+			case 6:
+				strDay="周五";
+
+				break;
+			case 7:
+				strDay="周六";
+				break;
+//
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+//
+		return strDay;
+//		return day;
+
+	}
+
 }

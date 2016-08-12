@@ -7,10 +7,13 @@ package com.sltj.medical.dao;
 public class stepTable {
 
     private Long id;
+    /** Not-null value. */
     private String date;
     private String step;
     private String kilometer;
     private String cal;
+    /** Not-null value. */
+    private String week;
 
     public stepTable() {
     }
@@ -19,12 +22,13 @@ public class stepTable {
         this.id = id;
     }
 
-    public stepTable(Long id, String date, String step, String kilometer, String cal) {
+    public stepTable(Long id, String date, String step, String kilometer, String cal, String week) {
         this.id = id;
         this.date = date;
         this.step = step;
         this.kilometer = kilometer;
         this.cal = cal;
+        this.week = week;
     }
 
     public Long getId() {
@@ -35,10 +39,12 @@ public class stepTable {
         this.id = id;
     }
 
+    /** Not-null value. */
     public String getDate() {
         return date;
     }
 
+    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setDate(String date) {
         this.date = date;
     }
@@ -65,6 +71,16 @@ public class stepTable {
 
     public void setCal(String cal) {
         this.cal = cal;
+    }
+
+    /** Not-null value. */
+    public String getWeek() {
+        return week;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setWeek(String week) {
+        this.week = week;
     }
 
 }
