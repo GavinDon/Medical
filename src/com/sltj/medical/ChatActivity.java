@@ -2,10 +2,7 @@ package com.sltj.medical;
 
 import com.sltj.medical.base.BaseActivity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class ChatActivity extends BaseActivity {
 
@@ -25,4 +22,6 @@ public class ChatActivity extends BaseActivity {
 	public void setupData() {
 		
 	}
+	
+	
 }

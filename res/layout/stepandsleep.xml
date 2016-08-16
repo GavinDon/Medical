@@ -7,23 +7,35 @@
     <com.db.chart.view.LineChartView
         android:id="@+id/will_linechart"
         android:layout_width="match_parent"
-        android:layout_height="240dp" >
+        android:layout_height="220dp" 
+        android:layout_marginTop="5dp">
     </com.db.chart.view.LineChartView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="10dp"
+        android:background="@color/black" />
 
     <com.sltj.medical.wedgit.LineGridView
         android:id="@+id/stepdetail_gv"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:numColumns="2"
         android:scrollbars="@null" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black" />
 
     <TextView
         android:id="@+id/stepdetail_tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2016年08月12日"
         android:layout_gravity="center"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:text="2016年08月12日" />
 
 </LinearLayout>

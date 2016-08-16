@@ -43,8 +43,8 @@ public class LineGridView extends GridView {
 			localPaint2.setStyle(Paint.Style.FILL);
 			localPaint.setStrokeWidth(1);
 			localPaint2.setStrokeWidth(1);
-			localPaint.setColor(Color.parseColor("#e5e5e5"));
-			localPaint2.setColor(Color.parseColor("#e5e5e5"));
+			localPaint.setColor(Color.rgb(0, 0, 0));
+			localPaint2.setColor(Color.parseColor("#e2e2e2"));
 			for (int i = 0; i < childCount; i++) {
 				View cellView = getChildAt(i);
 				if ((i + 1) % column != 0) {

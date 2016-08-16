@@ -64,8 +64,7 @@ public class PrivateDoctorFragment extends Fragment implements OnCheckedChangeLi
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		Intent mIntent = new Intent();
 		switch (checkedId) {
-		case R.id.rb_doctor:
-			break;
+		
 		case R.id.rb_member:
 			// 会员
 			mIntent.setClass(this.mContext, MemberPrivateDoctorActivity.class);
@@ -73,6 +72,14 @@ public class PrivateDoctorFragment extends Fragment implements OnCheckedChangeLi
 			mRadioGroup.clearCheck();
 			
 			break;
+		case R.id.rb_doctor:
+			// 医生
+			mIntent.setClass(this.mContext, ChatActivity.class);
+			startActivity(mIntent);
+			mRadioGroup.clearCheck();
+			
+			break;
+	
 		}
 
 	}

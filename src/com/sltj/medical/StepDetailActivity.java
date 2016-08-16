@@ -1,10 +1,7 @@
 package com.sltj.medical;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +9,8 @@ import java.util.Map;
 import com.db.chart.Tools;
 import com.db.chart.listener.OnEntryClickListener;
 import com.db.chart.model.LineSet;
-import com.db.chart.model.Point;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
-import com.db.chart.view.Tooltip;
 import com.db.chart.view.animation.Animation;
 import com.sltj.medical.adapter.StepDetailGridView;
 import com.sltj.medical.base.BaseActivity;
@@ -23,7 +18,6 @@ import com.sltj.medical.dao.DbCore;
 import com.sltj.medical.dao.stepTable;
 import com.sltj.medical.dao.stepTableDao;
 import com.sltj.medical.dao.stepTableDao.Properties;
-import com.sltj.medical.util.LogUtils;
 import com.sltj.medical.util.MTools;
 import com.sltj.medical.util.ToastUtils;
 import com.sltj.medical.wedgit.CircleBar;
@@ -32,10 +26,11 @@ import com.sltj.medical.wedgit.LineGridView;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -126,9 +121,7 @@ public class StepDetailActivity extends BaseActivity
 		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
 		List<stepTable> list = dao.queryBuilder().where(Properties.Date.eq(MTools.getCurrentDate("yyyy-MM-dd"))).list();
 		if (list.size() > 0) {
-			// Integer.parseInt(list.get(0).getStep()
-			stepProgress.update(Integer.parseInt(list.get(0).getStep()), 2000);
-			// stepProgress.update(5306, 2000);
+			stepProgress.update(Integer.parseInt(list.get(0).getStep()), 500);
 			tvDictance.setText(list.get(0).getKilometer() + "公里");
 			tvCal.setText(list.get(0).getCal() + "卡");
 		}
@@ -140,71 +133,51 @@ public class StepDetailActivity extends BaseActivity
 	 */
 	private final static String[] mLabels = { "周一", "周二", "周三", "周四", "周五", "周六", "周日" };
 	private final float[] mValues = { 0f, 0f, 0f, 0f, 0f, 0f, 0f };
-	private LineSet dataset;
-	String[] titleValue = { "总步数", "总距离", "活动时间", "活动消耗" };// 显示某一天的数据
-	String[] Value = {};
+	private LineSet dataset; // 折线图圆点设置类
+	private String[] titleValue = { "总步数", "总距离", "活动时间", "活动消耗" };// 显示某一天的数据
+	private String[] Value = {}; // 对应着每一个item的数据数组。如：步数：cal,kilometer
+	private LineGridView gv; // 展示数据的GridView;
+	private TextView tvCurrentDate;
+	private List<Map<String, String>> lst = new ArrayList<Map<String, String>>();
 
+	/**
+	 * 展示运动折线图
+	 */
 	private void initWillianmChart() {
-
-		gv = (LineGridView) findViewById(R.id.stepdetail_gv);
-		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
-		List<stepTable> talbe = dao.loadAll();
-//
-//		if (!talbe.isEmpty()) {
-//			for (int i = 0; i < talbe.size(); i++) {
-//				int date = MTools.getWeekDay(talbe.get(i).getDate(), "yyyy-MM-dd");
-//				switch (date) {
-//				case 1:
-//					mValues[6] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				case 2:
-//					mValues[0] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				case 3:
-//					mValues[1] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				case 4:
-//					mValues[2] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				case 5:
-//					mValues[3] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				case 6:
-//					mValues[4] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				case 7:
-//					mValues[5] = Float.parseFloat(talbe.get(i).getStep());
-//					break;
-//				}
-
-//			}
-//		}
+		lst.clear();
 		vSleep = mInflayter.inflate(R.layout.stepandsleep, null);
 		LineChartView willLineChartView = (LineChartView) vSleep.findViewById(R.id.will_linechart);
+		gv = (LineGridView) vSleep.findViewById(R.id.stepdetail_gv);
+		tvCurrentDate = (TextView) vSleep.findViewById(R.id.stepdetail_tv_date);
+		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
+		List<stepTable> talbe = dao.loadAll();
 		dataset = new LineSet();
-		
-		for(int i=0;i<talbe.size();i++){
-			float step=Float.parseFloat(talbe.get(i).getStep());
-			String week=talbe.get(i).getWeek();
-			 dataset.addPoint(week, step);
+		// 添加折线图的每一个点
+		for (int i = 0; i < talbe.size(); i++) {
+			float step = Float.parseFloat(talbe.get(i).getStep());
+			String week = talbe.get(i).getWeek();
+			dataset.addPoint(week, step);
 		}
-		
+		// 设置折线图的样式
 		dataset.setColor(Color.parseColor("#ff0000")).setDotsRadius(Tools.fromDpToPx(6))
 				.setDotsColor(Color.parseColor("#FFE4E1")).setSmooth(false).setDotsStrokeColor(Color.WHITE)
 				.setDotsStrokeThickness(2F);
 		willLineChartView.addData(dataset);
-		willLineChartView.setBorderSpacing(1).setTopSpacing(10).setStep(10000)
+		willLineChartView.setTopSpacing(10).setStep(10000).setAxisLabelsSpacing(20)
 				// x,y轴上文字显示的位置,默认是显示为outside;
-				.setXLabels(AxisController.LabelPosition.OUTSIDE).setYLabels(AxisController.LabelPosition.NONE)
+				.setXLabels(AxisController.LabelPosition.OUTSIDE).setYLabels(AxisController.LabelPosition.OUTSIDE)
 				// 是否显示x,y轴
 				.setXAxis(false).setYAxis(false).setBorderSpacing(Tools.fromDpToPx(5));
-		Tooltip t = new Tooltip(this);
+		// Tooltip t = new Tooltip(this);
 		Animation anim = new Animation();
 		anim.setAlpha(1000);
 
 		// 拆线图上小圆点的点击事件
 		willLineChartView.setOnEntryClickListener(this);
 		willLineChartView.show(anim);
+		// 默认展示今日祥细数据
+		setTodayData();
+		//
 		mFramLayout.addView(vSleep);
 
 	}
@@ -223,28 +196,55 @@ public class StepDetailActivity extends BaseActivity
 
 	@Override
 	public void onClick(int setIndex, int entryIndex, Rect rect) {
-		ToastUtils.show(this, setIndex + "--" + entryIndex + "--", 0);
-		// 0是周一
-		
-
+		lst.clear();
 		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
-		List<stepTable> tableLst = dao.queryBuilder().where(Properties.Date.eq("")).list();
+		//找到数据库中点击的数据
+		List<stepTable> tableLst = dao.queryBuilder().where(Properties.Id.eq(entryIndex + 1)).list();
 		if (!tableLst.isEmpty()) {
 			String step = tableLst.get(0).getStep();
 			String cal = tableLst.get(0).getCal();
 			String kilometer = tableLst.get(0).getKilometer();
-			Value = new String[] { step, cal, kilometer, "15" };
-		}
+			Value = new String[] { step+" 步", cal+" 卡路里", "23"+" 分钟", kilometer+" 大卡"  };
 
-		for (int i = 0; i < titleValue.length; i++) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("title", titleValue[i]);
-			map.put("value", Value[i]);
+			for (int i = 0; i < titleValue.length; i++) {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("title", titleValue[i]);
+				map.put("value", Value[i]);
+				lst.add(map);
+			}
+			StepDetailGridView mAdapter = new StepDetailGridView(StepDetailActivity.this, lst);
+			gv.setAdapter(mAdapter);
+			mAdapter.notifyDataSetChanged();
+
 		}
 
 	}
 
-	private LineGridView gv;
-	private List<Map<String, String>> lst = new ArrayList<Map<String, String>>();
+	/**
+	 * 展示当日数据
+	 */
+	private void setTodayData() {
+		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
+		// 获取当日日期从数据库获取数据
+		String currentDate = MTools.getCurrentDate("yyyy-MM-dd");
+		tvCurrentDate.setText(currentDate);
+		List<stepTable> tableLst = dao.queryBuilder().where(Properties.Date.eq(currentDate)).list();
+		// 若有数据则显示出来
+		if (!tableLst.isEmpty()) {
+			String step = tableLst.get(0).getStep();
+			String cal = tableLst.get(0).getCal();
+			String kilometer = tableLst.get(0).getKilometer();
+			Value = new String[] { step+" 步", cal+" 卡路里", "63"+" 分钟", kilometer+" 大卡" };
 
+			for (int i = 0; i < titleValue.length; i++) {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("title", titleValue[i]);
+				map.put("value", Value[i]);
+				lst.add(map);
+			}
+			StepDetailGridView mAdapter = new StepDetailGridView(StepDetailActivity.this, lst);
+			gv.setAdapter(mAdapter);
+		}
+
+	}
 }

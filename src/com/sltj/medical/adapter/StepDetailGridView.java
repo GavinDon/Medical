@@ -37,7 +37,7 @@ public class StepDetailGridView extends MyBaseAdapter<Map<String, String>> {
 		TextView title = vh.getView(TextView.class, R.id.tv_gv_what);
 		TextView date = vh.getView(TextView.class, R.id.tv_gv_date);
 		title.setText(map.get("title"));
-		title.setText(map.get("value"));
+		date.setText(map.get("value"));
 	}
 
 }
