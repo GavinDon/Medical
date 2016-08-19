@@ -3,7 +3,7 @@
     android:id="@+id/relative1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/bg_left"
     android:clickable="true"
     android:orientation="vertical"
     android:paddingLeft="40dp"
@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+       
         android:layout_weight="2" >
 
         <ImageView

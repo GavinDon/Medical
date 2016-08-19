@@ -343,5 +343,8 @@
     <color name="indent_green">#31b9af</color>
     <color name="indent_orange">#ff6600</color>
     <color name="qq_blue">#15b5e9</color>
+    <!-- bg背景色，divider分割线色 -->
+    <color name="bg">#fdfdfd</color>
+    <color name="divider">#d1d1d1</color>
 
 </resources>

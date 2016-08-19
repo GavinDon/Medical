@@ -157,7 +157,7 @@ public class MemberPrivateDoctorActivity extends BaseActivity implements OnItemC
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 		String content = etSearch.getText().toString();
 		List<Map<String, Object>> searchLst = mSearchUtil.filterData(s.toString().toLowerCase(), "name");
-		mAdapter.clear();
+		lst.clear();
 		mAdapter = new DoctorListAdapter(MemberPrivateDoctorActivity.this, searchLst);
 		mListView.setAdapter(mAdapter);
 		if (content == null || content.equals("")) {

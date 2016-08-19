@@ -128,6 +128,7 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 		filter.addAction(Define.BROAD_CAST_RECV_DATA_COMPLETE);
 		this.getActivity().registerReceiver(mReceiver, filter);
 		mImageLoader = ImageLoader.getInstance();
+		
 		AdList = new String[] { Config.URL_BANNER_IMAG1, Config.URL_BANNER_IMAG2, Config.URL_BANNER_IMAG3 };
 	}
 

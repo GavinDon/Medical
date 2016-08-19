@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
+    android:layout_height="90dp"
     android:orientation="horizontal"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp" >
+    android:paddingBottom="8dp"
+    android:paddingTop="12dp" >
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="120dp"
-        android:layout_height="90dp"
-        android:scaleType="centerCrop"
-        android:layout_marginLeft="20dp"
+        android:layout_width="92dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="10dp"
+        android:scaleType="fitXY"
         android:src="@drawable/bg_default_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/ada_hot_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:layout_marginLeft="10dp"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:gravity="top"
+            android:maxLines="2"
             android:text="中源协和.施郎国际精准医学净化营第十六期中源协和.施郎国际精准医学净化营第十六期"
             android:textColor="@color/black3"
-            android:layout_gravity="top"
-            android:gravity="top"
             android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="bottom"
-            
             android:orientation="horizontal" >
 
             <TextView

@@ -7,15 +7,14 @@ import java.util.TimerTask;
 import com.sltj.medical.base.MyApplication;
 import com.sltj.medical.dataUtil.HandleNetSendMsg;
 import com.sltj.medical.publicMsg.MsgInncDef;
-import com.sltj.medical.publicMsg.MsgInncDef.NetConnectReq;
 import com.sltj.medical.socketutil.AuthSocketConn;
 import com.sltj.medical.socketutil.DNSParsing;
 import com.sltj.medical.socketutil.HouseSocketConn;
 import com.sltj.medical.socketutil.PushData;
 import com.sltj.medical.util.LogUtils;
+import com.sltj.medical.util.MTools;
 import com.sltj.medical.util.NetWorkUtil;
 import com.sltj.medical.util.ToastUtils;
-import com.sltj.medical.util.MTools;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -27,10 +26,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.provider.Settings;
-import android.view.WindowManager;
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 public class NetWorkStateService extends Service {
 	
@@ -249,43 +244,43 @@ public class NetWorkStateService extends Service {
 	
 	
 	
-	private void showNetWorkDialog(){
-		SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.ERROR_TYPE);
-		sweetAlertDialog.setTitleText("没网啦！");
-		sweetAlertDialog.setCancelText("取消");
-		sweetAlertDialog.setConfirmText("打开网络");
-		sweetAlertDialog.setCanceledOnTouchOutside(true);
-		sweetAlertDialog.setConfirmClickListener(new OnSweetClickListener() {
-			
-			@Override
-			public void onClick(SweetAlertDialog sweetAlertDialog) {
-				
-				
-				if (android.os.Build.VERSION.SDK_INT > 13) {// 3.2以上打开设置界面，也可以直接用ACTION_WIRELESS_SETTINGS打开到wifi界面
-					Intent intent = new Intent(Settings.ACTION_SETTINGS);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
-				} else {
-					Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
-				}
-				
-				sweetAlertDialog.dismissWithAnimation();
-				
-			}
-		});
-		sweetAlertDialog.setCancelClickListener(new OnSweetClickListener() {
-			
-			@Override
-			public void onClick(SweetAlertDialog sweetAlertDialog) {
-				// TODO Auto-generated method stub
-				sweetAlertDialog.dismissWithAnimation();
-			}
-		});
-		sweetAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-		sweetAlertDialog.show();
-	}
+//	private void showNetWorkDialog(){
+//		SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(getApplicationContext(), SweetAlertDialog.ERROR_TYPE);
+//		sweetAlertDialog.setTitleText("没网啦！");
+//		sweetAlertDialog.setCancelText("取消");
+//		sweetAlertDialog.setConfirmText("打开网络");
+//		sweetAlertDialog.setCanceledOnTouchOutside(true);
+//		sweetAlertDialog.setConfirmClickListener(new OnSweetClickListener() {
+//			
+//			@Override
+//			public void onClick(SweetAlertDialog sweetAlertDialog) {
+//				
+//				
+//				if (android.os.Build.VERSION.SDK_INT > 13) {// 3.2以上打开设置界面，也可以直接用ACTION_WIRELESS_SETTINGS打开到wifi界面
+//					Intent intent = new Intent(Settings.ACTION_SETTINGS);
+//					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//					startActivity(intent);
+//				} else {
+//					Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+//					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//					startActivity(intent);
+//				}
+//				
+//				sweetAlertDialog.dismissWithAnimation();
+//				
+//			}
+//		});
+//		sweetAlertDialog.setCancelClickListener(new OnSweetClickListener() {
+//			
+//			@Override
+//			public void onClick(SweetAlertDialog sweetAlertDialog) {
+//				// TODO Auto-generated method stub
+//				sweetAlertDialog.dismissWithAnimation();
+//			}
+//		});
+//		sweetAlertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//		sweetAlertDialog.show();
+//	}
 	
 	
 	

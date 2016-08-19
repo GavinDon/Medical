@@ -37,18 +37,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -57,13 +61,14 @@ import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements OnCheckedChangeListener,OnClickListener,OnItemClickListener {
+public class MainActivity extends FragmentActivity
+		implements OnCheckedChangeListener, OnClickListener, OnItemClickListener {
 	private RadioGroup mRadioGroup;
 	private long exitTime = 0;
 
 	private FragmentController controller;
-	private TextView mtitle;//标题
-	private CircleImageView ivUser;//用户中心头像
+	private TextView mtitle;// 标题
+	private CircleImageView ivUser;// 用户中心头像
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +88,9 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	 */
 	private void initViews() {
 		initDrawerLayout();
-//		initActionBar();
-		mtitle=(TextView) findViewById(R.id.tv_fragment_title);
-		ivUser=(CircleImageView) findViewById(R.id.slide_user);
+		// initActionBar();
+		mtitle = (TextView) findViewById(R.id.tv_fragment_title);
+		ivUser = (CircleImageView) findViewById(R.id.slide_user);
 		ivUser.setOnClickListener(this);
 		mRadioGroup = (RadioGroup) findViewById(R.id.rb_main_page);
 		mRadioGroup.setOnCheckedChangeListener(this);
@@ -124,7 +129,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		// 销毁Fragment
 		FragmentController.onDestroy();
 		unregisterReceiver(mReceiver);
-		stopService(new Intent(getApplicationContext(),NetWorkStateService.class));
+		stopService(new Intent(getApplicationContext(), NetWorkStateService.class));
 	}
 
 	@Override
@@ -133,6 +138,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 			if (System.currentTimeMillis() - exitTime > 2000) {
 				Toast.makeText(this, "再按一次退出", 0).show();
 				exitTime = System.currentTimeMillis();
+				toggleLeftSliding();
 			} else {
 				moveTaskToBack(true);
 				this.finish();
@@ -143,7 +149,8 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 			controller.showFragment(0);
 		}
 	}
-    //最优服务器seq
+
+	// 最优服务器seq
 	private int seqBestServer;
 
 	private void bestServerReq() {
@@ -169,12 +176,12 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 			int port = list.get(0).getIPort();
 			PushData.setHouseIp(ip);
 			PushData.setHousePort(port);
-			if(MyApplication.authSocketConn!=null&&!MyApplication.authSocketConn.isClose()){
+			if (MyApplication.authSocketConn != null && !MyApplication.authSocketConn.isClose()) {
 				MyApplication.authSocketConn.closeAuthSocket();
-				//连接消息处理服务器
+				// 连接消息处理服务器
 				new HouseSocketConn(ip, port);
 				LogUtils.i("处理消息服务器登录成功============");
-				
+
 			}
 		}
 
@@ -195,16 +202,16 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 
 		}
 	};
-  /**
-   * DrawerLayout
-   */
+	/**
+	 * DrawerLayout
+	 */
 	private DrawerLayout drawerLayout;
 	private ActionBar actionBar;
 
 	@SuppressLint("NewApi")
 	private void initActionBar() {
 		actionBar = getActionBar();
-		LogUtils.i(actionBar+"");
+		LogUtils.i(actionBar + "");
 		actionBar.show();
 		actionBar.setDisplayShowHomeEnabled(true);
 		actionBar.setDisplayShowTitleEnabled(false);
@@ -230,11 +237,21 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		return true;
 	}
 
+	/*
+	 * 初始化抽屉布局
+	 */
 	private void initDrawerLayout() {
 		drawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_main);
+		WindowManager manager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+		Display display = manager.getDefaultDisplay();
+		// Point p = new Point();
+		// display.getRealSize(p);//需要API为17
+		drawerLayout.setMinimumWidth(display.getWidth() - 20);
 		initUserData();
+		// 设置一个简单的左边或者右边的影子
+		drawerLayout.setDrawerShadow(R.drawable.shadow_article, GravityCompat.END);
+		// 设置遮盖主要内容的布颜色
 		drawerLayout.setScrimColor(Color.TRANSPARENT);
-		
 
 	}
 
@@ -248,7 +265,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 
 	@Override
 	public void onClick(View v) {
-		
+
 		switch (v.getId()) {
 		case R.id.slide_user:
 			toggleLeftSliding();
@@ -259,32 +276,33 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		}
 	}
 
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case android.R.id.home:
-//			toggleLeftSliding();
-//			break;
-//		}
-//
-//		return super.onOptionsItemSelected(item);
-//	}
-//
-//	@Override
-//	public boolean onMenuOpened(int featureId, Menu menu) {
-//		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-//			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-//				try {
-//					Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-//					m.setAccessible(true);
-//					m.invoke(menu, true);
-//				} catch (Exception e) {
-//				}
-//			}
-//		}
-//		return super.onMenuOpened(featureId, menu);
-//	}
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case android.R.id.home:
+	// toggleLeftSliding();
+	// break;
+	// }
+	//
+	// return super.onOptionsItemSelected(item);
+	// }
+	//
+	// @Override
+	// public boolean onMenuOpened(int featureId, Menu menu) {
+	// if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+	// if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+	// try {
+	// Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible",
+	// Boolean.TYPE);
+	// m.setAccessible(true);
+	// m.invoke(menu, true);
+	// } catch (Exception e) {
+	// }
+	// }
+	// }
+	// return super.onMenuOpened(featureId, menu);
+	// }
 
 	/*
 	 * 个人中心
@@ -292,6 +310,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	private ListView mListView;
 	private List<Map<String, Object>> lst = new ArrayList<Map<String, Object>>();
 	private HeathManagerAdapter mAdapter;
+
 	private void initUserData() {
 		mListView = (ListView) findViewById(R.id.lv_usercenter);
 		String title[] = new String[] { "我的收藏", "设置帮助", "意见反鐀" };
@@ -309,7 +328,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		ToastUtils.show(this, position+"", 0);
+		ToastUtils.show(this, position + "", 0);
 	}
 
 }
