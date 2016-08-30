@@ -49,10 +49,10 @@ public class HealthManagerActivity extends BaseActivity implements OnItemClickLi
 
 	private void initData() {
 		String title[] = new String[] { "体检记录", "治疗记录", "用药记录", "运动记录", "心情记录" };
-		int[] img = new int[] { R.id.useLogo, R.id.useLogo, R.id.useLogo, R.id.useLogo, R.id.useLogo };
+		int[] img = new int[] { R.drawable.breast, R.drawable.treat, R.drawable.pharmacy, R.drawable.sports1, R.drawable.test };
 		for (int i = 0; i < title.length; i++) {
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("img", img[i]);
+//			map.put("imgs", img[i]);
 			map.put("title", title[i]);
 			lst.add(map);
 		}

@@ -1,6 +1,7 @@
 package com.sltj.medical.publicMsg;
 
 import com.sltj.medical.base.MyApplication;
+import com.sltj.medical.dataUtil.protobuf.EnumPro.eMESSAGE_TYPE_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eMSG_OPER_PRO;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.ePAGE_TYPE_PRO;
 
@@ -41,7 +42,7 @@ public final class MsgInncDef {
 	}
 
 	/*
-	 * 登录认证--通用请求
+	 * 登录认证--通用请求 获取离线消息请求
 	 */
 	public static class AuthNetCommonReq {
 		public int iUserid; // userid
@@ -50,6 +51,8 @@ public final class MsgInncDef {
 			this.iUserid = iUserid;
 		}
 	}
+	
+	
 
 	/*
 	 * 连接请求
@@ -125,14 +128,16 @@ public final class MsgInncDef {
 		public eMSG_OPER_PRO collectType; // 资讯ID
 
 	}
+
 	/**
 	 * 用户发表评论请求
 	 */
 	public static class IUserCommentReq {
 		public int iUserId; // 用户ID
 		public int inewsid; // 资讯ID
-		public String szComment; //	//评论的内容
+		public String szComment; // //评论的内容
 	}
+
 	/**
 	 * 评论列表请求
 	 */
@@ -141,6 +146,7 @@ public final class MsgInncDef {
 		public int inewsid; // 资讯ID
 
 	}
+
 	/**
 	 * 评论点赞请求
 	 */
@@ -149,8 +155,6 @@ public final class MsgInncDef {
 		public int iCommentid; // 评论ID
 
 	}
-	
-	
 
 	/**
 	 * 获取体检记录列表-治疗记录-用药记录 请求参数一样（消息类型是不一样的。）
@@ -207,7 +211,7 @@ public final class MsgInncDef {
 		public int iGrade; // 记录评分
 		public String szContent;// 消息内容
 	}
-	
+
 	/**
 	 * 获取我的医生列表请求消息
 	 *
@@ -216,26 +220,39 @@ public final class MsgInncDef {
 		public int iuserid; //
 		public int iPage; // 第几页
 	}
+
 	/**
-	 *获取医生详细信息请求
+	 * 获取医生详细信息请求
 	 *
 	 */
 	public static class IDoctorInfoReq {
 		public int iuserid; //
 		public int iDoctorId; // 第几页
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 聊天请求
+	 *
+	 */
+	public static class IChatReq {
+		public int iuserid; //
+		public int idstid; // 对方Id
+		public eMESSAGE_TYPE_PRO type;// 消息类型
+		public String content; // 消息内容
+	}
+
+	/**
+	 * 获取历史记录请求消息
+	 *
+	 */
+	public static class IChatHistoryReq {
+		public int iuserid; //
+		public int idstid; // 对方Id
+		public ePAGE_TYPE_PRO ePageType;// 消息类型
+		public String szBeforTime; // 这个时间点之前消息
+		public int iBeforRecoderid;// 这条记录之前的消息，每条消息发送成功会返还一个消息ID
+		public int iRecoderNum; // 一次获取多少条消息
+	}
 
 	// -------------------------------------------------------------------------------------//
 	/*

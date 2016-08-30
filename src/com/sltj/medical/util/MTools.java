@@ -18,6 +18,9 @@ import java.util.regex.Pattern;
 import com.sltj.medical.dataUtil.protobuf.EnumPro.eOPERRESULT_PRO;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
 import android.text.Spannable;
@@ -709,8 +712,8 @@ public class MTools {
 	 */
 	public static String getWeekDay(String date, String pattern) {
 		SimpleDateFormat format = new SimpleDateFormat(pattern);
-		String strDay="";
-		int	day=0;
+		String strDay = "";
+		int day = 0;
 		try {
 			Date d = format.parse(date);
 			Calendar cal = Calendar.getInstance();
@@ -718,39 +721,61 @@ public class MTools {
 			day = cal.get(Calendar.DAY_OF_WEEK);
 			switch (day) {
 			case 1:
-				strDay="周日";
-				break ;
+				strDay = "周日";
+				break;
 
 			case 2:
-				strDay="周一";
+				strDay = "周一";
 				break;
 			case 3:
-				strDay="周二";
+				strDay = "周二";
 				break;
 			case 4:
-				strDay=("周三");
+				strDay = ("周三");
 
 				break;
 			case 5:
-				strDay="周四";
+				strDay = "周四";
 
 				break;
 			case 6:
-				strDay="周五";
+				strDay = "周五";
 
 				break;
 			case 7:
-				strDay="周六";
+				strDay = "周六";
 				break;
-//
+			//
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-//
+		//
 		return strDay;
-//		return day;
+		// return day;
 
+	}
+    /*
+     * 判断程序是否处在前台
+     */
+	public static boolean isRunForeground(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getApplicationContext()
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		String packageName = context.getApplicationContext().getPackageName();
+		List<RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+		if (appProcesses == null)
+
+			return false;
+
+		for (RunningAppProcessInfo appProcess : appProcesses) {
+			if (appProcess.processName.equals(packageName)
+					&& appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+
+				return true;// 程序运行在前台
+
+			}
+		}
+		return false;
 	}
 
 }

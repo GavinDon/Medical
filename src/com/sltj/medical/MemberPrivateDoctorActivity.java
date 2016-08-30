@@ -27,9 +27,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * 私人医生 （会员版）
@@ -56,7 +59,7 @@ public class MemberPrivateDoctorActivity extends BaseActivity implements OnItemC
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Define.BROAD_CAST_RECV_DATA_COMPLETE);
 		this.registerReceiver(mReceiver, filter);
-
+		initBar();
 		initialize();
 	}
 
@@ -112,7 +115,8 @@ public class MemberPrivateDoctorActivity extends BaseActivity implements OnItemC
 					map.put("name", resp.info.get(i).getSzNickName());
 					map.put("chatInfo", resp.info.get(i).getSzRealName());
 					map.put("workYears", resp.info.get(i).getIHeadPic());
-					map.put("job", resp.info.get(i).getIHeadPic());
+					map.put("job", "我们");
+					map.put("doctorId", resp.info.get(i).getId());
 					lst.add(map);
 				}
 				mAdapter = new DoctorListAdapter(this, lst);
@@ -155,25 +159,38 @@ public class MemberPrivateDoctorActivity extends BaseActivity implements OnItemC
 
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-		String content = etSearch.getText().toString();
-		List<Map<String, Object>> searchLst = mSearchUtil.filterData(s.toString().toLowerCase(), "name");
-		lst.clear();
-		mAdapter = new DoctorListAdapter(MemberPrivateDoctorActivity.this, searchLst);
-		mListView.setAdapter(mAdapter);
-		if (content == null || content.equals("")) {
-			mAdapter.clear();
-			mAdapter = new DoctorListAdapter(MemberPrivateDoctorActivity.this, lst);
-			mListView.setAdapter(mAdapter);
-		}
+
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+		String content = etSearch.getText().toString();
+		List<Map<String, Object>> searchLst = mSearchUtil.filterData(s.toString().toLowerCase(), "job");
+		mAdapter.setData(searchLst);
+		if (content == null || content.equals("")) {
+			mAdapter.setData(lst);
+		}
 	}
 
 	@Override
 	public void afterTextChanged(Editable s) {
+
+	}
+
+	/*
+	 * 初始化标题栏
+	 */
+	private void initBar() {
+		LinearLayout llback = (LinearLayout) findViewById(R.id.ll_back);
+		TextView iv = (TextView) findViewById(R.id.tv_title);
+		iv.setText("医生列表");
+		llback.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				MemberPrivateDoctorActivity.this.finish();
+			}
+		});
 
 	}
 

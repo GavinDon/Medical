@@ -57,6 +57,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                 android:layout_marginLeft="5dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/mobile_bg" />
 
@@ -90,8 +91,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/mobile_vertify_bg" />
+                android:src="@drawable/password" />
 
             <com.sltj.medical.wedgit.ClearEditText
                 android:id="@+id/et_login_vertifal"

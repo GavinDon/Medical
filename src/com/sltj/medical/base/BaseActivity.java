@@ -3,9 +3,9 @@ package com.sltj.medical.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sltj.medical.R;
 import com.sltj.medical.util.LogUtils;
 
+import android.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
@@ -32,25 +32,25 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	protected void onStart() {
-		LogUtils.d(this.getClass().getSimpleName() + " onStart() invoked!!");
+		LogUtils.i(this.getClass().getSimpleName() + " onStart() invoked!!");
 		super.onStart();
 	}
 
 	@Override
 	protected void onRestart() {
-		LogUtils.d(this.getClass().getSimpleName() + " onRestart() invoked!!");
+		LogUtils.i(this.getClass().getSimpleName() + " onRestart() invoked!!");
 		super.onRestart();
 	}
 
 	@Override
 	protected void onResume() {
-		LogUtils.d(this.getClass().getSimpleName() + " onResume() invoked!!");
+		LogUtils.i(this.getClass().getSimpleName() + " onResume() invoked!!");
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-		LogUtils.d(this.getClass().getSimpleName() + " onPause() invoked!!");
+		LogUtils.i(this.getClass().getSimpleName() + " onPause() invoked!!");
 		super.onPause();
 		try {
 			// MobclickAgent.onPause(this);
@@ -61,20 +61,20 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	protected void onStop() {
-		LogUtils.d(this.getClass().getSimpleName() + " onStop() invoked!!");
+		LogUtils.i(this.getClass().getSimpleName() + " onStop() invoked!!");
 		System.gc();
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-		LogUtils.d(this.getClass().getSimpleName() + " onDestroy() invoked!!");
+		LogUtils.i(this.getClass().getSimpleName() + " onDestroy() invoked!!");
 		super.onDestroy();
 		System.gc();
 	}
 
 	public  void overridePendingTransition() {
-		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+//		overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 
 	}
 

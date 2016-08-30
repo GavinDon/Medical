@@ -1,6 +1,7 @@
 package com.sltj.medical.base;
 
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.View;
@@ -23,6 +24,11 @@ public abstract class MyBaseAdapter<TItem> extends BaseAdapter {
 		this.mContext = context;
 		this.lst = lst;
 
+	}
+	public void setData( List<TItem> lst) {
+		this.lst.clear();
+		this.lst.addAll(lst);
+		notifyDataSetChanged();
 	}
 
 	public void insert(TItem data) {

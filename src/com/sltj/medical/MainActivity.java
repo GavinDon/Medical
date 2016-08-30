@@ -138,7 +138,7 @@ public class MainActivity extends FragmentActivity
 			if (System.currentTimeMillis() - exitTime > 2000) {
 				Toast.makeText(this, "再按一次退出", 0).show();
 				exitTime = System.currentTimeMillis();
-				toggleLeftSliding();
+//				toggleLeftSliding();
 			} else {
 				moveTaskToBack(true);
 				this.finish();

@@ -199,7 +199,7 @@ public class StepService extends Service implements SensorEventListener {
 		// Notification.Builder builder = new Notification.Builder(this);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
 		builder.setContentIntent(contentIntent);
-		builder.setSmallIcon(R.drawable.app_icon);
+		builder.setSmallIcon(R.drawable.logo);
 		builder.setTicker("施郎天娇");
 		builder.setContentTitle("施郎天娇");
 		// 设置不可清除
@@ -312,10 +312,12 @@ public class StepService extends Service implements SensorEventListener {
 		int tempStep = StepDcretor.CURRENT_SETP;
 		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
 		List<stepTable>all= dao.loadAll();
+		//保证存储一周内的数据 
 		if(all.size()>7){
 			QueryBuilder<stepTable> oneTable=dao.queryBuilder().orderAsc(Properties.Id).limit(1);
 			dao.delete(oneTable.list().get(0));
 		}
+		
 		// 查询当日的数据
 		List<stepTable> stepList = dao.queryBuilder().where(Properties.Date.eq(CURRENTDATE)).list();
 		stepTable item;

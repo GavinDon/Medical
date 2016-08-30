@@ -13,6 +13,7 @@
     <dimen name="margin_left_right">20dp</dimen>
     <dimen name="margin_top">20dp</dimen>
     <dimen name="margin_bottom">20dp</dimen>
+    <dimen name="height_top_bar">48dp</dimen>
     
     
 

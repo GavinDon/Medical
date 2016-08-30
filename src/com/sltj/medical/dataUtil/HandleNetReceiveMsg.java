@@ -7,12 +7,15 @@ import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_GetServerInfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.AuthMsgPro.AUTH_LoginResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_AddMoodResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_ChatResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_CollectionNewsResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetDoctorInfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetHomeNewsResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetMyDoctorListResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsCommentListResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetNewsResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetOffLineMessageResp_PRO;
+import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_GetRecoderResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Mood_RecordResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_InfoResp_PRO;
 import com.sltj.medical.dataUtil.protobuf.CmdMsgPro.CMD_Get_Tijian_RecordResp_PRO;
@@ -45,12 +48,15 @@ import com.sltj.medical.publicMsg.MsgReceiveDef.MoodRecordResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NetBestServerResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NetConnectResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.NewsResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.OffLineMessageResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalDetailResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.PhysicalResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.ReadNewsResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.TreatDetailResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.TreatResp;
 import com.sltj.medical.publicMsg.MsgReceiveDef.UserCommentResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.chatInfoResp;
+import com.sltj.medical.publicMsg.MsgReceiveDef.historyMessageResp;
 import com.sltj.medical.publicMsg.NetHouseMsgType;
 
 /**
@@ -150,11 +156,22 @@ public class HandleNetReceiveMsg {
 		case NetHouseMsgType.CMD_DOCTORDETAIL_RESP:// 医生祥情
 			obj = HandleDoctorDetailResp(proBufBody);
 			break;
+		case NetHouseMsgType.CMD_GET_CHAT_RESP:// 聊天响应
+			obj = HandleChatResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_HISTORY_RESP:// 历史记录
+			obj = HandleChatHistoryResp(proBufBody);
+			break;
+		case NetHouseMsgType.CMD_GET_OFF_LINE_RESP:// 离线信息
+			obj = HandleOffLineResp(proBufBody);
+			break;
 		}
 
 		return obj;
 
 	}
+
+	
 
 	/**
 	 * 连接请求响应数据
@@ -560,7 +577,7 @@ public class HandleNetReceiveMsg {
 	}
 
 	/*
-	 * 医生祥情列表响应
+	 * 医生祥情响应
 	 */
 	private static DoctorInfoResp HandleDoctorDetailResp(byte[] proBufBody) {
 
@@ -576,6 +593,60 @@ public class HandleNetReceiveMsg {
 		}
 		return Localresp;
 	}
+	/*
+	 * 聊天响应
+	 */
+	private static chatInfoResp HandleChatResp(byte[] proBufBody) {
+		MsgReceiveDef.chatInfoResp Localresp=new MsgReceiveDef.chatInfoResp();
+		try {
+			CmdMsgPro.CMD_ChatResp_PRO servResp = CMD_ChatResp_PRO.parseFrom(proBufBody);
+
+			Localresp.eResult = servResp.getEResult();
+			Localresp.idstid=servResp.getIdstid();
+			Localresp.iRecoderid=servResp.getIRecoderid();	//返回此消息的id
+
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+	/*
+	 * 历史记录响应
+	 */
+	private static historyMessageResp HandleChatHistoryResp(byte[] proBufBody) {
+		MsgReceiveDef.historyMessageResp Localresp=new MsgReceiveDef.historyMessageResp();
+		try {
+			CmdMsgPro.CMD_GetRecoderResp_PRO servResp = CMD_GetRecoderResp_PRO.parseFrom(proBufBody);
+			
+			Localresp.eResult = servResp.getEResult();
+			Localresp.idstid=servResp.getIdstid();
+			Localresp.info=servResp.getInfoList();
+			Localresp.szBeforTime=servResp.getSzBeforTime();
+			
+			
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+	/*
+	 * 获取离线响应消息
+	 */
+	private static OffLineMessageResp HandleOffLineResp(byte[] proBufBody) {
+		MsgReceiveDef.OffLineMessageResp Localresp=new MsgReceiveDef.OffLineMessageResp();
+		try {
+			CmdMsgPro.CMD_GetOffLineMessageResp_PRO servResp = CMD_GetOffLineMessageResp_PRO.parseFrom(proBufBody);
+			
+			Localresp.eResult = servResp.getEResult();
+			Localresp.info=servResp.getInfoList();
+			
+			
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		}
+		return Localresp;
+	}
+	
 
 	// ----------------------------以下为通用响应------------------------------------------//
 	/**
@@ -597,5 +668,6 @@ public class HandleNetReceiveMsg {
 
 		return commonResp;
 	}
+	
 
 }

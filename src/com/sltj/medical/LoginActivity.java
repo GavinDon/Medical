@@ -1,6 +1,8 @@
 package com.sltj.medical;
 
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.base.MyApplication;
@@ -39,6 +41,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
 	// 验证码按钮
@@ -66,6 +69,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		registerReceiver(mReceiver, filter);
 		myApplication = (MyApplication) getApplication();
 		mProgressDialog = new LoadingDialog(this);
+
 		initialize();
 	}
 
@@ -105,6 +109,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		// 连接登录服务器
 		AuthSocketConn.pushtoList(connData);
 		LogUtils.i("连接登录服务器请求数据--sequence=" + seqConnAuth + "/" + Arrays.toString(connData) + "----------");
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		// 从后台转入前台时再次请求连接服务
+		if (MyApplication.authSocketConn.isClose()) {
+			MyApplication.authSocketConn = new AuthSocketConn(PushData.getAuthIp(), PushData.getAuthPort());
+			loadConnectAuthDataBroad();
+		}
 	}
 
 	@Override
@@ -224,7 +238,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		case R.id.btn_login:
 			if (etCode.getText().toString().trim().equals(strCode)) {
 				loginProBuffer(etCode.getText().toString().trim());
-			}else{
+			} else {
 				ToastUtils.show(this, "验证码错误", 0);
 			}
 
@@ -379,5 +393,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			myApplication.houseSocketConn = new HouseSocketConn(PushData.getHouseIp(), PushData.getHousePort());
 		}
 	};
+
+	
+	@Override
+	public void onBackPressed() {
+		this.finish();
+	}
 
 }

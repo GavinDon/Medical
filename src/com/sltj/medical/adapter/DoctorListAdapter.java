@@ -24,6 +24,8 @@ public class DoctorListAdapter extends MyBaseAdapter<Map<String, Object>> {
 		this.mContext = context;
 	}
 
+
+
 	@Override
 	public int[] getFindViewByIDs() {
 		return new int[] { R.id.ada_tv_chatinfo, R.id.ada_tv_doctrename, R.id.ada_tv_doctrjob, R.id.ada_tv_workyears,
@@ -37,14 +39,16 @@ public class DoctorListAdapter extends MyBaseAdapter<Map<String, Object>> {
 
 	@Override
 	public void renderData(int position, ViewHolder vh) {
+		Map<String, Object> map = this.getItemT(position);
 		TextView tvChatInfo = vh.getView(TextView.class, R.id.ada_tv_chatinfo);// 聊天信息
 		TextView tvDoctName = vh.getView(TextView.class, R.id.ada_tv_doctrename);// 医生姓名
 		TextView tvDoctJob = vh.getView(TextView.class, R.id.ada_tv_doctrjob); // 医生职位
 		TextView tvWorkYears = vh.getView(TextView.class, R.id.ada_tv_workyears);// 工龄
 		ImageView ivIcon = vh.getView(ImageView.class, R.id.ada_iv_doctoricon);// 医生头像
 		tvChatInfo.setText("");
-		
-		
+		tvDoctName.setText(map.get("name").toString());
+		tvDoctJob.setText(map.get("workYears").toString());
+
 	}
 
 }

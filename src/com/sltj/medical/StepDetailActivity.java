@@ -106,7 +106,7 @@ public class StepDetailActivity extends BaseActivity
 		TextView tvDictance = (TextView) vStep.findViewById(R.id.tv_itemstep_distance);
 		TextView tvCal = (TextView) vStep.findViewById(R.id.tv_itemstep_cal);
 		TextView tvTodayStep = (TextView) vStep.findViewById(R.id.today_step);
-		int todayStep = getIntent().getIntExtra("todayStep", 10);
+		int todayStep = getIntent().getIntExtra("todayStep", 0);
 		tvTodayStep.setText(todayStep + "");
 		CircleBar stepProgress = (CircleBar) vStep.findViewById(R.id.step_circlebar);
 		// 设置当前时间
@@ -151,12 +151,17 @@ public class StepDetailActivity extends BaseActivity
 		tvCurrentDate = (TextView) vSleep.findViewById(R.id.stepdetail_tv_date);
 		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
 		List<stepTable> talbe = dao.loadAll();
-		dataset = new LineSet();
+		dataset = new LineSet(mLabels, mValues);
 		// 添加折线图的每一个点
 		for (int i = 0; i < talbe.size(); i++) {
 			float step = Float.parseFloat(talbe.get(i).getStep());
 			String week = talbe.get(i).getWeek();
-			dataset.addPoint(week, step);
+			for (int j = 0; j < mLabels.length; j++) {
+				if (mLabels[j].equals(week)) {
+					mValues[j] = step;
+					dataset.updateValues(mValues);
+				}
+			}
 		}
 		// 设置折线图的样式
 		dataset.setColor(Color.parseColor("#ff0000")).setDotsRadius(Tools.fromDpToPx(6))
@@ -197,14 +202,38 @@ public class StepDetailActivity extends BaseActivity
 	@Override
 	public void onClick(int setIndex, int entryIndex, Rect rect) {
 		lst.clear();
+		String strDay = "";
 		stepTableDao dao = DbCore.getDaoSession().getStepTableDao();
-		//找到数据库中点击的数据
-		List<stepTable> tableLst = dao.queryBuilder().where(Properties.Id.eq(entryIndex + 1)).list();
+		switch (entryIndex) {
+		case 0:
+			strDay = "周一";
+			break;
+		case 1:
+			strDay = "周二";
+			break;
+		case 2:
+			strDay = "周三";
+			break;
+		case 3:
+			strDay = "周四";
+			break;
+		case 4:
+			strDay = ("周五");
+			break;
+		case 5:
+			strDay = "周六";
+			break;
+		case 6:
+			strDay = "周日";
+			break;
+		}
+		// 找到数据库中点击的数据
+		List<stepTable> tableLst = dao.queryBuilder().where(Properties.Week.eq(strDay)).list();
 		if (!tableLst.isEmpty()) {
 			String step = tableLst.get(0).getStep();
 			String cal = tableLst.get(0).getCal();
 			String kilometer = tableLst.get(0).getKilometer();
-			Value = new String[] { step+" 步", cal+" 卡路里", "23"+" 分钟", kilometer+" 大卡"  };
+			Value = new String[] { step + " 步", cal + " 卡路里", "23" + " 分钟", kilometer + " 大卡" };
 
 			for (int i = 0; i < titleValue.length; i++) {
 				Map<String, String> map = new HashMap<String, String>();
@@ -234,7 +263,7 @@ public class StepDetailActivity extends BaseActivity
 			String step = tableLst.get(0).getStep();
 			String cal = tableLst.get(0).getCal();
 			String kilometer = tableLst.get(0).getKilometer();
-			Value = new String[] { step+" 步", cal+" 卡路里", "63"+" 分钟", kilometer+" 大卡" };
+			Value = new String[] { step + " 步", cal + " 卡路里", "63" + " 分钟", kilometer + " 大卡" };
 
 			for (int i = 0; i < titleValue.length; i++) {
 				Map<String, String> map = new HashMap<String, String>();

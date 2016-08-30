@@ -44,7 +44,7 @@ public class NetHouseMsgType {
 
 	public final static int CMD_GET_COMMENTZAN_REQ = 10011; // 获取评论点赞请求消息
 	public final static int CMD_GET_COMMENTZAN_RESP = 10012; // 获取评论点赞响应消息
-	
+
 	public final static int CMD_GET_MYDOCTOR_REQ = 10021; // 获取我的医生列表请求消息
 	public final static int CMD_GET_MYDOCTOR_RESP = 10022; // 获取我的医生列表响应消息
 
@@ -77,5 +77,14 @@ public class NetHouseMsgType {
 
 	public final static int CMD_GET_MEDICATIONSDETAIL_REQ = 10047; // 获获取用药详细信息请求消息
 	public final static int CMD_GET_MEDICATIONSDETAIL_RESP = 10048; // 获取用药详细信息响应消息
+
+	public final static int CMD_GET_OFF_LINE_REQ = 10027; // 获取离线请求消息
+	public final static int CMD_GET_OFF_LINE_RESP = 10028; // 获取离线响应消息
+
+	public final static int CMD_GET_HISTORY_REQ = 10029; // 获取历史记录请求消息
+	public final static int CMD_GET_HISTORY_RESP = 10030; // 获取历史记录响应消息
+
+	public final static int CMD_GET_CHAT_REQ = 10031; // 聊天请求消息
+	public final static int CMD_GET_CHAT_RESP = 10032; // 聊天响应消息
 
 }

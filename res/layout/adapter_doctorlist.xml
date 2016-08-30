@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:orientation="horizontal" >
+    android:layout_height="90dp"
+    android:minHeight="90dp"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:paddingTop="12dp" >
 
     <com.sltj.medical.wedgit.CircleImageView
         android:id="@+id/ada_iv_doctoricon"

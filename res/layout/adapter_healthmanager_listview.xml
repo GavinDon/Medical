@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/ada_iv_mine_img"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:scaleType="centerCrop"
@@ -22,7 +22,7 @@
             android:id="@+id/ada_tv_mine_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="16dp"
             android:gravity="center"
             android:text="购物车购物车购物车购物"
             android:textColor="@color/black3"
