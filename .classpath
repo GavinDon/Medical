@@ -11,6 +11,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/commons-httpclient-3.0-rc4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="libs/glide-3.7.0.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>

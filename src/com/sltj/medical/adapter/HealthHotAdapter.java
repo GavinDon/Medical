@@ -3,6 +3,9 @@ package com.sltj.medical.adapter;
 import java.util.List;
 import java.util.Map;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sltj.medical.R;
 import com.sltj.medical.base.MyBaseAdapter;
@@ -49,9 +52,11 @@ public class HealthHotAdapter extends MyBaseAdapter<Map<String, Object>> {
 		tvTitle.setText(map.get("title").toString());
 		tvRead.setText(map.get("read") + "阅读");
 		tvCollect.setText(map.get("collect") + "收藏");
-		String url=String.valueOf(map.get("imgurl"));
-		
-		loader.displayImage(url, image);
+		String url = String.valueOf(map.get("imgurl"));
+			//CROSSFADE 图片淡入淡出效果
+		Glide.with(mContext).load(url).centerCrop().placeholder(R.drawable.cat_100).crossFade().skipMemoryCache(false)
+				.diskCacheStrategy(DiskCacheStrategy.ALL).priority(Priority.HIGH).into(image);
+		// loader.displayImage(url, image);
 	}
 
 	String img[] = {
