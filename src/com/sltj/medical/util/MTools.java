@@ -777,5 +777,27 @@ public class MTools {
 		}
 		return false;
 	}
+	/**
+	 * 比较时间相差分钟数
+	 * 
+	 * @return string日期
+	 * @param pattern
+	 *            日期格式
+	 * @throws ParseException
+	 */
+	public static long CompaerMill(String shiftTime, String pattern) {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);// 日期字符串格式
+		String strCurrentDate = sdf.format(new Date());
+		try {
+			Date date1 = sdf.parse(shiftTime);// 按照格式解析字符串，返回Date对象
+			Date date2 = sdf.parse(strCurrentDate);
+			long seconds = (date1.getTime() - date2.getTime()) / 1000;// 得出两个时间的毫秒差，再除以1000得到相差秒数
+			long minutes = seconds / 60;// 将秒数换算成分钟数
+			System.out.println(minutes);
+			return minutes;
+		} catch (Exception e) {
+		}
+		return 0;
 
+	}
 }

@@ -36,6 +36,7 @@ import com.sltj.medical.socketutil.HouseSocketConn;
 import com.sltj.medical.util.FixedSpeedScroller;
 import com.sltj.medical.util.LogUtils;
 import com.sltj.medical.util.ToastUtils;
+import com.sltj.medical.wedgit.LoadingDialog;
 import com.sltj.medical.util.MTools;
 
 import android.content.BroadcastReceiver;
@@ -79,7 +80,7 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 	private Context mContext;
 	private ViewPager adViewPager;
 	private List<ImageView> imageViews;// 滑动的图片集合
-
+	private LoadingDialog mDialog;
 	private List<View> dots; // 图片标题正文的那些点
 	private int currentItem = 0; // 当前图片的索引号
 	// 定义的指示点
@@ -108,13 +109,13 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 				adViewPager.setCurrentItem(msg.arg1);
 				break;
 			case Config.LOAD_DATA_SUCCESS:
+				mDialog.dismiss();
 				mAdapter.notifyDataSetChanged();
 				mPullListView.onRefreshComplete();
 				break;
 			case Config.LOAD_DATA_OVERTIME:
-				// mAdapter.notifyDataSetChanged();
+				mDialog.dismiss();
 				mPullListView.onRefreshComplete();
-				// ToastUtils.show(mContext, "请求失败",0);
 
 			}
 		};
@@ -128,8 +129,8 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 		filter.addAction(Define.BROAD_CAST_RECV_DATA_COMPLETE);
 		this.getActivity().registerReceiver(mReceiver, filter);
 		mImageLoader = ImageLoader.getInstance();
-		
 		AdList = new String[] { Config.URL_BANNER_IMAG1, Config.URL_BANNER_IMAG2, Config.URL_BANNER_IMAG3 };
+		 mDialog=new LoadingDialog(this.getActivity());
 	}
 
 	@Override
@@ -403,6 +404,7 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 		MsgInncDef.INewsReq newsReq = new MsgInncDef.INewsReq();
 		newsReq.iUserId = MyApplication.userId;
 		newsReq.eType = type;
+		mDialog.show();
 		/*
 		 * 判断 上拉下拉需要上传的时间点
 		 */
@@ -423,6 +425,7 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 		}
 
 		switch (type) {
+		
 		case eNEWS_PRO.EN_NEWS_ACCURATE_PRO_VALUE:// 精准医疗
 			seqAccurate = MyApplication.SequenceNo++;
 			btData = HandleNetSendMsg.HandleNewsPro(newsReq, seqAccurate);
@@ -451,7 +454,6 @@ public class NewsFragment extends Fragment implements OnCheckedChangeListener, O
 	 */
 
 	private void newsProResp(Long recvTime) {
-
 		NewsResp resp = (NewsResp) HandleMsgDistribute.getInstance().queryCompleteMsg(recvTime);
 		List<Net_NewsInfo_PRO> info = resp.info;
 

@@ -47,6 +47,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -138,7 +139,6 @@ public class MainActivity extends FragmentActivity
 			if (System.currentTimeMillis() - exitTime > 2000) {
 				Toast.makeText(this, "再按一次退出", 0).show();
 				exitTime = System.currentTimeMillis();
-//				toggleLeftSliding();
 			} else {
 				moveTaskToBack(true);
 				this.finish();
@@ -276,33 +276,6 @@ public class MainActivity extends FragmentActivity
 		}
 	}
 
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// toggleLeftSliding();
-	// break;
-	// }
-	//
-	// return super.onOptionsItemSelected(item);
-	// }
-	//
-	// @Override
-	// public boolean onMenuOpened(int featureId, Menu menu) {
-	// if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-	// if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-	// try {
-	// Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible",
-	// Boolean.TYPE);
-	// m.setAccessible(true);
-	// m.invoke(menu, true);
-	// } catch (Exception e) {
-	// }
-	// }
-	// }
-	// return super.onMenuOpened(featureId, menu);
-	// }
 
 	/*
 	 * 个人中心
@@ -330,5 +303,14 @@ public class MainActivity extends FragmentActivity
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		ToastUtils.show(this, position + "", 0);
 	}
+
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebview.canGoBack()) {
+//			mWebview.goBack(); // goBack()表示返回WebView的上一页面
+//			return true;
+//		}
+//		return super.onKeyDown(keyCode, event);
+//	}
 
 }

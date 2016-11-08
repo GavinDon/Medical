@@ -149,7 +149,7 @@ public class SearchUtil {
 				searchDataList.add(fileterName);
 			}
 		}
-		// 遍历拿出源数据中所有值并放入一个新的集合中;
+		// 遍历拿出源数据中所有Key值并放入一个新的集合中;
 		for (int j = 0; j < strData.size(); j++) {
 			String srcName = strData.get(j).get(key).toString();
 			srcDataList.add(srcName);

@@ -18,13 +18,18 @@ import android.widget.TextView;
  */
 public class DoctorListAdapter extends MyBaseAdapter<Map<String, Object>> {
 	private Context mContext;
+	private List<Map<String, Object>> lst;
 
 	public DoctorListAdapter(Context context, List<Map<String, Object>> lst) {
 		super(context, lst);
 		this.mContext = context;
 	}
 
-
+	public void setDatas(List<Map<String, Object>> list) {
+		this.lst.clear();
+		this.lst.addAll(list);
+		notifyDataSetChanged();
+	}
 
 	@Override
 	public int[] getFindViewByIDs() {

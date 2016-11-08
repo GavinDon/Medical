@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">诺贝尔</string>
+    <string name="app_name">放朗天骄</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="s_name">陕西欣欣家政服务有限公司</string>
@@ -25,5 +25,6 @@
     <string name="title_activity_member_private_doctor">MemberPrivateDoctorActivity</string>
     <string name="title_activity_doctor_detail">DoctorDetailActivity</string>
     <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_convert">ConvertActivity</string>
 
 </resources>

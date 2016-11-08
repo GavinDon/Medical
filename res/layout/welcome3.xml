@@ -15,7 +15,6 @@
         android:clickable="true"
         android:gravity="center"
         android:onClick="startExperience"
-        android:text="立即体验"
         android:textColor="#508bc7"
         android:textSize="16sp" />
 

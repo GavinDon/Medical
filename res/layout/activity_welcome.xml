@@ -20,6 +20,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dip"
+            android:visibility="gone"
             android:gravity="center" >
 
             <View

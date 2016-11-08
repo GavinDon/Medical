@@ -1,10 +1,14 @@
 package com.sltj.medical;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.sltj.medical.adapter.AdapterChat;
 import com.sltj.medical.base.BaseActivity;
 import com.sltj.medical.base.MyApplication;
+import com.sltj.medical.bean.ChatBean;
 import com.sltj.medical.config.Define;
 import com.sltj.medical.dataUtil.HandleMsgDistribute;
 import com.sltj.medical.dataUtil.HandleNetSendMsg;
@@ -30,14 +34,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity implements  OnClickListener{
 	private int seqChat; // 聊天seq;
 	private EditText mEditTextContent;
 	private Button buttonSend;
 	private Button btnMore;
 	private int doctorId;
 	private ListView  chatListView;
-	private List<String>lst=new ArrayList<String>();
+	private List<ChatBean>lst=new ArrayList<ChatBean>();
+	private  AdapterChat mAdapter;
+	private Button btnFrom;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,6 +63,8 @@ public class ChatActivity extends BaseActivity {
 		buttonSend = (Button) findViewById(R.id.btn_send);
 		chatListView=(ListView) findViewById(R.id.chat_list);
 		btnMore = (Button) findViewById(R.id.btn_more);
+		btnFrom = (Button) findViewById(R.id.btn_set_mode_voice);
+		
 		// 监听文字框
 		mEditTextContent.addTextChangedListener(new TextWatcher() {
 
@@ -84,7 +92,11 @@ public class ChatActivity extends BaseActivity {
 
 	@Override
 	public void setupData() {
+		mAdapter=new AdapterChat(this, lst);
 		chatReq();
+		buttonSend.setOnClickListener(this);
+		btnFrom.setOnClickListener(this);
+		
 	}
 
 	/*
@@ -130,6 +142,9 @@ public class ChatActivity extends BaseActivity {
 
 		}
 	};
+	
+	
+	
 
 	/*
 	 * 初始化标题栏
@@ -146,6 +161,38 @@ public class ChatActivity extends BaseActivity {
 			}
 		});
 
+	}
+
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_send:
+			ChatBean chatBean=new ChatBean();
+			chatBean.setSendDate(new Date());//发送时间
+			chatBean.setChatContent(mEditTextContent.getText().toString());
+			chatBean.setType(ChatBean.MESSAGE_SEND);
+			chatListView.setAdapter(mAdapter);
+			lst.add(chatBean);
+			mAdapter.notifyDataSetChanged();
+			mEditTextContent.setText("");
+			chatListView.setSelection(lst.size()-1);//设置偏移到最后一条消息;
+			chatReq();//聊天请求
+			
+			break;
+			
+		case R.id.btn_set_mode_voice:
+			//模拟接收消息
+			ChatBean chatBean2=new ChatBean();
+			chatBean2.setChatContent(mEditTextContent.getText().toString());
+			chatBean2.setType(ChatBean.MESSAGE_RECIVE);
+			chatBean2.setSendDate(new Date());
+			chatListView.setAdapter(mAdapter);
+			lst.add(chatBean2);
+			mAdapter.notifyDataSetChanged();
+			mEditTextContent.setText("");
+			chatListView.setSelection(lst.size()-1);
+		}
 	}
 
 }

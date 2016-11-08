@@ -3,7 +3,7 @@
     android:id="@+id/welcome1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcom_1"
+    android:background="@drawable/welcome_1"
     android:orientation="vertical" >
 
 </LinearLayout>

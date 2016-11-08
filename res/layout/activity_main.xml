@@ -58,7 +58,7 @@
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
-                android:background="@color/lightpink"
+                android:background="#F3F3F3"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
@@ -69,61 +69,66 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/press_tab"
+                    android:background="@null"
                     android:button="@null"
                     android:checked="true"
+                    android:drawableTop="@drawable/sel_one"
                     android:gravity="center"
-                    android:text="首页"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:text="天骄会"
+                    android:textColor="@drawable/bottom_textcolor"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/radio_news"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/press_tab"
+                    android:background="@null"
                     android:button="@null"
+                    android:drawableTop="@drawable/sel_two"
                     android:gravity="center"
-                    android:text="资讯"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:text="健康资讯"
+                    android:textColor="@drawable/bottom_textcolor"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/radio_healthmanager"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/press_tab"
+                    android:background="@null"
                     android:button="@null"
+                    android:drawableTop="@drawable/sel_three"
                     android:gravity="center"
                     android:text="健康管理"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textColor="@drawable/bottom_textcolor"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/radio_persion"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/press_tab"
+                    android:background="@null"
                     android:button="@null"
+                    android:drawableTop="@drawable/sel_four"
                     android:gravity="center"
                     android:text="私人医生"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textColor="@drawable/bottom_textcolor"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/radio_product"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/press_tab"
+                    android:background="@null"
                     android:button="@null"
+                    android:drawableTop="@drawable/sel_five"
                     android:gravity="center"
-                    android:text="产品"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:text="微官网"
+                    android:textColor="@drawable/bottom_textcolor"
+                    android:textSize="12sp" />
             </RadioGroup>
 
             <View
